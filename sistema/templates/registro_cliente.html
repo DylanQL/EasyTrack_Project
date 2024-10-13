@@ -1,0 +1,24 @@
+<!-- Sistema/templates/registro_cliente.html -->
+{% extends 'base.html' %}
+
+{% block title %}Registro de Cliente{% endblock %}
+
+{% block content %}
+<h2>Registro de Cliente</h2>
+<form method="post">
+    {% csrf_token %}
+    <label for="dni">DNI:</label>
+    <input type="text" id="dni" name="dni" required><br><br>
+
+    <label for="nombres">NOMBRES:</label>
+    <input type="text" id="nombres" name="nombres" required><br><br>
+
+    <label for="apellidos">APELLIDOS:</label>
+    <input type="text" id="apellidos" name="apellidos" required><br><br>
+
+    <label for="telefono">TELÉFONO:</label>
+    <input type="text" id="telefono" name="telefono" required><br><br>
+
+    <button type="submit">Registrar</button>
+</form>
+{% endblock %}
