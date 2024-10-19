@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.hashers import make_password
+
 
 class Cliente(models.Model):
     dni = models.CharField(max_length=15)
@@ -30,8 +32,13 @@ class Terminal(models.Model):
 class Empleado(models.Model):
     nombres = models.CharField(max_length=100)
     apellidos = models.CharField(max_length=100)
-    correo = models.EmailField()
-    password = models.CharField(max_length=128)
+    correo = models.EmailField(unique=True)  # El correo debe ser único para cada empleado
+    password = models.CharField(max_length=128)  # Contraseña encriptada
+
+    def save(self, *args, **kwargs):
+        # Encriptamos la contraseña antes de guardarla
+        self.password = make_password(self.password)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.nombres} {self.apellidos}"
@@ -50,7 +57,7 @@ class Encomienda(models.Model):
     terminal_partida = models.ForeignKey(Terminal, on_delete=models.CASCADE, related_name="terminal_partida")
     terminal_destino = models.ForeignKey(Terminal, on_delete=models.CASCADE, related_name="terminal_destino")
     volumen = models.DecimalField(max_digits=10, decimal_places=2)
-    fecha_salida = models.DateTimeField()
+    fecha_salida = models.DateTimeField(null=True, blank=True)  # Hacerlo opcional
     fecha_llegada = models.DateTimeField(null=True, blank=True)
     estado = models.CharField(max_length=50)
     condicion_envio = models.CharField(max_length=50)
@@ -58,10 +65,11 @@ class Encomienda(models.Model):
     fecha_registro = models.DateTimeField(auto_now_add=True)
     fecha_entrega = models.DateTimeField(null=True, blank=True)
     empleado_registro = models.ForeignKey(Empleado, on_delete=models.CASCADE, related_name="empleado_registro")
-    empleado_entrega = models.ForeignKey(Empleado, on_delete=models.CASCADE, related_name="empleado_entrega")
+    empleado_entrega = models.ForeignKey(Empleado, on_delete=models.CASCADE, related_name="empleado_entrega", null=True, blank=True)
 
     def __str__(self):
         return f"Encomienda {self.id} - {self.descripcion}"
+
 
 class Reclamo(models.Model):
     encomienda = models.ForeignKey(Encomienda, on_delete=models.CASCADE)

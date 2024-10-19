@@ -1,0 +1,25 @@
+{% extends 'layout/base_cliente.html' %}
+
+{% block title %}Contáctanos{% endblock %}
+
+{% block content %}
+    <h1>Contáctanos</h1>
+    <p>Si tienes alguna pregunta, comentario o necesitas más información sobre nuestros servicios, no dudes en contactarnos.</p>
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <label for="nombre">Nombre:</label><br>
+        <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required><br>
+
+        <label for="email">Correo Electrónico:</label><br>
+        <input type="email" id="email" name="email" placeholder="Tu correo" required><br>
+
+        <label for="asunto">Asunto:</label><br>
+        <input type="text" id="asunto" name="asunto" placeholder="Asunto" required><br>
+
+        <label for="mensaje">Mensaje:</label><br>
+        <textarea id="mensaje" name="mensaje" placeholder="Escribe tu mensaje aquí..." required></textarea><br>
+
+        <button type="submit">Enviar</button>
+    </form>
+{% endblock %}

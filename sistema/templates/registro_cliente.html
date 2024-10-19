@@ -1,24 +1,29 @@
-<!-- Sistema/templates/registro_cliente.html -->
-{% extends 'base.html' %}
+{% extends "layout/base_empleado.html" %}  <!-- Ahora extiende el archivo base para empleados -->
 
 {% block title %}Registro de Cliente{% endblock %}
 
 {% block content %}
-<h2>Registro de Cliente</h2>
-<form method="post">
-    {% csrf_token %}
-    <label for="dni">DNI:</label>
-    <input type="text" id="dni" name="dni" required><br><br>
-
-    <label for="nombres">NOMBRES:</label>
-    <input type="text" id="nombres" name="nombres" required><br><br>
-
-    <label for="apellidos">APELLIDOS:</label>
-    <input type="text" id="apellidos" name="apellidos" required><br><br>
-
-    <label for="telefono">TELÉFONO:</label>
-    <input type="text" id="telefono" name="telefono" required><br><br>
-
-    <button type="submit">Registrar</button>
-</form>
+<div class="container mt-5">
+    <h2>Registro de Cliente</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="dni">DNI:</label>
+            <input type="text" class="form-control" id="dni" name="dni" placeholder="Ingrese DNI" required>
+        </div>
+        <div class="form-group">
+            <label for="nombres">Nombres:</label>
+            <input type="text" class="form-control" id="nombres" name="nombres" placeholder="Ingrese nombres" required>
+        </div>
+        <div class="form-group">
+            <label for="apellidos">Apellidos:</label>
+            <input type="text" class="form-control" id="apellidos" name="apellidos" placeholder="Ingrese apellidos" required>
+        </div>
+        <div class="form-group">
+            <label for="telefono">Teléfono:</label>
+            <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Ingrese teléfono" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Registrar</button>
+    </form>
+</div>
 {% endblock %}

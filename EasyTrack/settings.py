@@ -10,9 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-import os
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-21i)wmi(@vnb*-j7^f-07jb4&q7l$o8cen&u61hxtskbs@z!0i'
+SECRET_KEY = 'django-insecure-8v(g8+fc01v&p(pmvch*j)e0b_81ot5^oha+ji8kt+edj(bm#%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -32,7 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'Sistema.apps.SistemaConfig',
+    'sistema.apps.SistemaConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -56,7 +55,7 @@ ROOT_URLCONF = 'EasyTrack.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'sistema/templates')],  # Se agrega la carpeta templates del sistema
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # Aquí asegúrate de que 'templates' esté registrado
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -118,9 +117,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'sistema/static')
-]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Cliente{% endblock %}</title>
+</head>
+<body>
+
+    <div class="navbar">
+        <a href="{% url 'nosotros' %}">Nosotros</a>
+        <a href="{% url 'index_cliente' %}">Rastrea tu encomienda</a>
+        <a href="{% url 'contactanos' %}">Contactanos</a>
+        <a href="{% url 'reclamos' %}">Reclamos</a>
+        <a href="{% url 'login_empleado' %}">Iniciar Sesión</a>
+    </div>
+
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+
+</body>
+</html>
