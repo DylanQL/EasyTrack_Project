@@ -1,0 +1,31 @@
+{% extends 'base_empleado.html' %}
+
+{% block title %}Lista de Reclamos{% endblock %}
+
+{% block content %}
+<h2>Lista de Reclamos</h2>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Encomienda</th>
+            <th>Motivo</th>
+            <th>Descripción</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for reclamo in reclamos %}
+        <tr>
+            <td>{{ reclamo.id }}</td>
+            <td>{{ reclamo.encomienda }}</td>
+            <td>{{ reclamo.motivo }}</td>
+            <td>{{ reclamo.descripcion }}</td>
+            <td>{{ reclamo.fecha }}</td>
+            <td>{{ reclamo.estado }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

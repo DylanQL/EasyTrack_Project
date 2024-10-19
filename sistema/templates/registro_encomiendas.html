@@ -1,0 +1,12 @@
+{% extends 'base_empleado.html' %}
+
+{% block title %}Registro de Encomiendas{% endblock %}
+
+{% block content %}
+<h2>Registro de Encomiendas</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Registrar</button>
+</form>
+{% endblock %}

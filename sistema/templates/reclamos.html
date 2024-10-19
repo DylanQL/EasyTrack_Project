@@ -1,0 +1,22 @@
+{% extends 'layout/base_cliente.html' %}
+
+{% block title %}Reclamos{% endblock %}
+
+{% block content %}
+    <h1>Reclamos</h1>
+    <p>Si tienes algún problema con una encomienda, por favor llena el siguiente formulario para presentar un reclamo.</p>
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <label for="encomienda">ID de la Encomienda:</label><br>
+        <input type="text" id="encomienda" name="encomienda" placeholder="Ingresa el ID de la encomienda" required><br>
+
+        <label for="motivo">Motivo del Reclamo:</label><br>
+        <input type="text" id="motivo" name="motivo" placeholder="Especifica el motivo" required><br>
+
+        <label for="descripcion">Descripción del Reclamo:</label><br>
+        <textarea id="descripcion" name="descripcion" placeholder="Describe tu reclamo..." required></textarea><br>
+
+        <button type="submit">Enviar Reclamo</button>
+    </form>
+{% endblock %}

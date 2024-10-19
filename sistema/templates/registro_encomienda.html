@@ -1,0 +1,83 @@
+{% extends "layout/base_empleado.html" %}
+
+{% block title %}Registro de Encomienda{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Registrar Encomienda</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="descripcion">Descripción:</label>
+            <input type="text" id="descripcion" name="descripcion" class="form-control" required>
+        </div><br>
+
+        <div class="form-group">
+            <label for="remitente">Remitente (ID del Cliente):</label>
+            <input type="text" id="remitente" name="remitente" class="form-control" required>
+        </div><br>
+
+        <div class="form-group">
+            <label for="destinatario">Destinatario (ID del Cliente):</label>
+            <input type="text" id="destinatario" name="destinatario" class="form-control" required>
+        </div><br>
+
+        <div class="form-group">
+            <label for="placa_vehiculo">Placa del Vehículo:</label>
+            <input type="text" id="placa_vehiculo" name="placa_vehiculo" class="form-control" required>
+        </div><br>
+
+        <!-- Campo select para la terminal de partida -->
+        <div class="form-group">
+            <label for="terminal_partida">Terminal de Partida:</label>
+            <select id="terminal_partida" name="terminal_partida" class="form-control" required>
+                {% for terminal in terminales %}
+                    <option value="{{ terminal.id }}">{{ terminal.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div><br>
+
+        <!-- Campo select para la terminal de destino -->
+        <div class="form-group">
+            <label for="terminal_destino">Terminal de Destino:</label>
+            <select id="terminal_destino" name="terminal_destino" class="form-control" required>
+                {% for terminal in terminales %}
+                    <option value="{{ terminal.id }}">{{ terminal.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div><br>
+
+        <div class="form-group">
+            <label for="volumen">Volumen:</label>
+            <input type="number" id="volumen" name="volumen" class="form-control" step="0.01" required>
+        </div><br>
+
+        <!-- Campo select para el estado -->
+        <div class="form-group">
+            <label for="estado">Estado:</label>
+            <select id="estado" name="estado" class="form-control" required>
+                <option value="no_entregado">No Entregado</option>
+                <option value="entregado">Entregado</option>
+            </select>
+        </div><br>
+
+        <!-- Campo select para la condición de envío -->
+        <div class="form-group">
+            <label for="condicion_envio">Condición del Envío:</label>
+            <select id="condicion_envio" name="condicion_envio" class="form-control" required>
+                {% for key, value in condiciones_envio %}
+                    <option value="{{ key }}">{{ value }}</option>
+                {% endfor %}
+            </select>
+        </div><br>
+
+        <div class="form-group">
+            <label for="cantidad_paquetes">Cantidad de Paquetes:</label>
+            <input type="number" id="cantidad_paquetes" name="cantidad_paquetes" class="form-control" required>
+        </div><br>
+
+        <button type="submit" class="btn btn-primary">Registrar Encomienda</button>
+    </form>
+</div>
+{% endblock %}

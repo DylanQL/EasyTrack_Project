@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}EasyTrack{% endblock %}</title>
+    <!-- Agrega aquí tus estilos CSS y scripts JS -->
+</head>
+<body>
+    <header>
+        <!-- Encabezado de la página -->
+        <h1>EasyTrack</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'registro_cliente' %}">Registro de Cliente</a></li>
+                <li><a href="{% url 'registro_encomiendas' %}">Registro de Encomiendas</a></li>
+                <li><a href="{% url 'actualizar_estado' %}">Actualizar Estado</a></li>
+                <li><a href="{% url 'control_envios' %}">Control de Envíos</a></li>
+                <li><a href="{% url 'rastreo_encomienda' %}">Rastreo de Encomienda</a></li>
+                <li><a href="{% url 'lista_clientes' %}">Lista de Clientes</a></li>
+                <li><a href="{% url 'lista_encomiendas' %}">Lista de Encomiendas</a></li>
+                <li><a href="{% url 'lista_reclamos' %}">Lista de Reclamos</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer>
+        <!-- Pie de página -->
+        <p>&copy; 2023 EasyTrack</p>
+    </footer>
+</body>
+</html>

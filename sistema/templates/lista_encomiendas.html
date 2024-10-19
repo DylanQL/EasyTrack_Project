@@ -1,0 +1,29 @@
+{% extends 'base_empleado.html' %}
+
+{% block title %}Lista de Encomiendas{% endblock %}
+
+{% block content %}
+<h2>Lista de Encomiendas</h2>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+            <th>Fecha de Salida</th>
+            <th>Fecha de Llegada</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for encomienda in encomiendas %}
+        <tr>
+            <td>{{ encomienda.id }}</td>
+            <td>{{ encomienda.descripcion }}</td>
+            <td>{{ encomienda.estado }}</td>
+            <td>{{ encomienda.fecha_salida }}</td>
+            <td>{{ encomienda.fecha_llegada }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

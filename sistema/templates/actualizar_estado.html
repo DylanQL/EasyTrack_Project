@@ -1,0 +1,12 @@
+{% extends 'base_empleado.html' %}
+
+{% block title %}Actualizar Estado{% endblock %}
+
+{% block content %}
+<h2>Actualizar Estado de Encomienda</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Actualizar</button>
+</form>
+{% endblock %}

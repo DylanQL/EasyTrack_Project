@@ -1,0 +1,34 @@
+{% extends 'layout/base_empleado.html' %}
+
+{% block title %}Listado de Reclamos{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Listado de Reclamos</h1>
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Encomienda</th>
+                <th>Motivo</th>
+                <th>Descripción</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reclamo in reclamos %}
+            <tr>
+                <td>{{ reclamo.id }}</td>
+                <td>{{ reclamo.encomienda.descripcion }}</td>
+                <td>{{ reclamo.motivo.descripcion }}</td>
+                <td>{{ reclamo.descripcion }}</td>
+                <td>{{ reclamo.fecha }}</td>
+                <td>{{ reclamo.estado }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

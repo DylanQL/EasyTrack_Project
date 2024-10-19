@@ -1,0 +1,24 @@
+{% extends 'base_empleado.html' %}
+
+{% block title %}Detalle de Encomienda{% endblock %}
+
+{% block content %}
+<h2>Detalle de Encomienda</h2>
+<p>ID: {{ encomienda.id }}</p>
+<p>Descripción: {{ encomienda.descripcion }}</p>
+<p>Estado: {{ encomienda.estado }}</p>
+<p>Fecha de Salida: {{ encomienda.fecha_salida }}</p>
+<p>Fecha de Llegada: {{ encomienda.fecha_llegada }}</p>
+<p>Remitente: {{ encomienda.remitente }}</p>
+<p>Destinatario: {{ encomienda.destinatario }}</p>
+<p>Placa del Vehículo: {{ encomienda.placa_vehiculo }}</p>
+<p>Terminal de Partida: {{ encomienda.terminal_partida }}</p>
+<p>Terminal de Destino: {{ encomienda.terminal_destino }}</p>
+<p>Volumen: {{ encomienda.volumen }}</p>
+<p>Condición de Envío: {{ encomienda.condicion_envio }}</p>
+<p>Cantidad de Paquetes: {{ encomienda.cantidad_paquetes }}</p>
+<p>Fecha de Registro: {{ encomienda.fecha_registro }}</p>
+<p>Fecha de Entrega: {{ encomienda.fecha_entrega }}</p>
+<p>Empleado de Registro: {{ encomienda.empleado_registro }}</p>
+<p>Empleado de Entrega: {{ encomienda.empleado_entrega }}</p>
+{% endblock %}

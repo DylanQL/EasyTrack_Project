@@ -1,0 +1,19 @@
+{% extends 'layout/base_empleado.html' %}
+
+{% block title %}Actualizar Estado de Encomienda{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Actualizar Estado de Encomienda</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="estado">Nuevo Estado:</label>
+            <input type="text" id="estado" name="estado" value="{{ encomienda.estado }}" class="form-control" required>
+        </div><br>
+
+        <button type="submit" class="btn btn-primary">Actualizar Estado</button>
+    </form>
+</div>
+{% endblock %}
