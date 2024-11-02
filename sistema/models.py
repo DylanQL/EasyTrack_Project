@@ -72,14 +72,16 @@ class Encomienda(models.Model):
 
 
 class Reclamo(models.Model):
-    encomienda = models.ForeignKey(Encomienda, on_delete=models.CASCADE)
-    motivo = models.ForeignKey(Motivo, on_delete=models.CASCADE)
+    encomienda = models.ForeignKey('Encomienda', on_delete=models.CASCADE)
+    motivo = models.CharField(max_length=100)  # Cambiado a CharField
     descripcion = models.TextField()
     fecha = models.DateTimeField(auto_now_add=True)
     estado = models.CharField(max_length=50)
 
     def __str__(self):
         return f"Reclamo {self.id} - {self.estado}"
+
+
 
 class Comprobante(models.Model):
     encomienda = models.ForeignKey(Encomienda, on_delete=models.CASCADE)

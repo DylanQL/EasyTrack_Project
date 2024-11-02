@@ -3,6 +3,10 @@ from django.contrib import messages
 from django.utils import timezone
 from django.contrib.auth.hashers import check_password
 from .models import Encomienda, Cliente, Empleado, Reclamo, Motivo, Terminal,Comprobante
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+from django import forms
+from .models import Reclamo
 
 # Decorador para verificar si el empleado está logueado
 def empleado_requerido(view_func):
@@ -219,3 +223,49 @@ def actualizar_estado_form(request, encomienda_id=None):
         'comprobante': comprobante,
         'monto': monto
     })
+
+class ReclamoForm(forms.Form):
+    encomienda_id = forms.CharField(
+        max_length=10,
+        label="ID de la Encomienda",
+        widget=forms.TextInput(attrs={'placeholder': 'Ingresa el ID del pedido'}),
+    )
+    motivo = forms.CharField(
+        max_length=100,
+        label="Motivo del Reclamo",
+        widget=forms.TextInput(attrs={'placeholder': 'Especifica el motivo'}),
+    )
+    descripcion = forms.CharField(
+        label="Descripción del Reclamo",
+        widget=forms.Textarea(attrs={'placeholder': 'Describe tu reclamo...'}),
+    )
+def enviar_reclamo(request):
+    if request.method == 'POST':
+        form = ReclamoForm(request.POST)
+        if form.is_valid():
+            encomienda_id = form.cleaned_data['encomienda_id']
+            motivo = form.cleaned_data['motivo']
+            descripcion = form.cleaned_data['descripcion']
+            
+            try:
+                # Verificar si la encomienda existe
+                encomienda = Encomienda.objects.get(id=encomienda_id)
+                
+                # Crear el reclamo
+                Reclamo.objects.create(
+                    encomienda=encomienda,
+                    motivo=motivo,
+                    descripcion=descripcion,
+                    estado='Pendiente'
+                )
+                
+                messages.success(request, 'Tu reclamo ha sido enviado exitosamente.')
+                return redirect('enviar_reclamo')  # Redirige a la misma página o a una página de confirmación
+            
+            except Encomienda.DoesNotExist:
+                messages.error(request, f"No se encontró una encomienda con ID {encomienda_id}.")
+    
+    else:
+        form = ReclamoForm()
+    
+    return render(request, 'reclamos.html', {'form': form})

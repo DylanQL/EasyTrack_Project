@@ -17,4 +17,6 @@ urlpatterns = [
     path('actualizar_estado_form/', views.actualizar_estado_form, name='actualizar_estado_form'),
     path('actualizar_estado_form/<int:encomienda_id>/', views.actualizar_estado_form, name='actualizar_estado_form'),
     path('listado_encomiendas/', views.listado_encomiendas, name='listado_encomiendas'),
+    path('enviar_reclamo/', views.enviar_reclamo, name='enviar_reclamo'),
+
 ]

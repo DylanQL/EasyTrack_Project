@@ -6,17 +6,18 @@
     <h1>Reclamos</h1>
     <p>Si tienes algún problema con una encomienda, por favor llena el siguiente formulario para presentar un reclamo.</p>
 
-    <form action="" method="post">
+    <form action="{% url 'enviar_reclamo' %}" method="post">
         {% csrf_token %}
-        <label for="encomienda">ID de la Encomienda:</label><br>
-        <input type="text" id="encomienda" name="encomienda" placeholder="Ingresa el ID de la encomienda" required><br>
-
-        <label for="motivo">Motivo del Reclamo:</label><br>
-        <input type="text" id="motivo" name="motivo" placeholder="Especifica el motivo" required><br>
-
-        <label for="descripcion">Descripción del Reclamo:</label><br>
-        <textarea id="descripcion" name="descripcion" placeholder="Describe tu reclamo..." required></textarea><br>
+        {{ form.as_p }}
 
         <button type="submit">Enviar Reclamo</button>
     </form>
+
+    {% if messages %}
+        <div style="color: green; margin-top: 10px;">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endblock %}
