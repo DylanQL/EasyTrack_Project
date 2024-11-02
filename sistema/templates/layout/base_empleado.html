@@ -6,17 +6,14 @@
     <title>{% block title %}Panel de Empleado{% endblock %}</title>
 </head>
 <body>
-
     <div class="navbar">
         <a href="{% url 'registro_cliente' %}">Registrar Cliente</a>
         <a href="{% url 'registro_encomienda' %}">Registrar Encomienda</a>
         <a href="{% url 'listado_clientes' %}">Listado Clientes</a>
         <a href="{% url 'listado_encomiendas' %}">Listado Encomiendas</a>
         <a href="{% url 'listado_reclamos' %}">Listado Reclamos</a>
-        <a href="{% url 'actualizar_estado_encomienda' %}">Actualizar Estado Encomienda</a>
 
         <div class="navbar-right">
-            <!-- Mostrar el nombre del empleado logueado -->
             {% if empleado %}
                 <p>Usuario: {{ empleado.nombres }} {{ empleado.apellidos }}</p>
             {% else %}
@@ -28,9 +25,7 @@
 
     <div class="content">
         {% block content %}
-        <!-- Aquí se renderizará el contenido dinámico de cada página -->
         {% endblock %}
     </div>
-
 </body>
 </html>

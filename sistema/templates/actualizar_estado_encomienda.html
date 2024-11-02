@@ -1,19 +1,57 @@
 {% extends 'layout/base_empleado.html' %}
 
-{% block title %}Actualizar Estado de Encomienda{% endblock %}
+{% block title %}Actualizar Estado{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1>Actualizar Estado de Encomienda</h1>
+<div style="text-align: center; font-family: Arial, sans-serif;">
+    <h1 style="font-weight: bold;">ACTUALIZAR ESTADO</h1>
 
-    <form method="POST">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="estado">Nuevo Estado:</label>
-            <input type="text" id="estado" name="estado" value="{{ encomienda.estado }}" class="form-control" required>
-        </div><br>
+    {% if encomienda %}
+        <!-- Formulario de actualización del estado de la encomienda -->
+        <form method="POST" action="{% url 'actualizar_estado_form' encomienda.id %}" style="display: inline-block; text-align: left;">
+            {% csrf_token %}
+            
+            <label><strong>ID ENCOMIENDA:</strong></label>
+            <span>{{ encomienda.id }}</span>
+            <input type="hidden" name="id" value="{{ encomienda.id }}">
+            <br><br>
 
-        <button type="submit" class="btn btn-primary">Actualizar Estado</button>
-    </form>
+            <!-- Campo "Estado de Pago" como un combo box -->
+            <label><strong>ESTADO DE PAGO:</strong></label>
+            <select name="estado_pago" style="font-weight: bold; color: olive;">
+                <option value="no_pagado" {% if comprobante and comprobante.estado_pago == "no_pagado" %}selected{% endif %}>NO PAGADO</option>
+                <option value="pagado" {% if comprobante and comprobante.estado_pago == "pagado" %}selected{% endif %}>PAGADO</option>
+            </select>
+            <br><br>
+
+            <label><strong>MONTO:</strong></label>
+            <span>{{ monto }}</span>
+            <br><br>
+
+            <label><strong>ESTADO:</strong></label>
+            <input type="text" name="estado" value="{{ encomienda.estado }}" required style="width: 150px; text-align: center;">
+            <br><br>
+
+            <!-- Botón de Actualizar Estado -->
+            <button type="submit" style="background-color: red; color: white; font-weight: bold; padding: 10px 20px; border: 2px solid black; border-radius: 10px;">
+                ACTUALIZAR ESTADO
+            </button>
+            
+            <!-- Botón de Cancelar -->
+            <a href="{% url 'listado_encomiendas' %}" style="background-color: gray; color: white; font-weight: bold; padding: 10px 20px; text-decoration: none; border: 2px solid black; border-radius: 10px; margin-left: 10px;">
+                CANCELAR
+            </a>
+        </form>
+    {% else %}
+        <p>No se ha encontrado la encomienda.</p>
+    {% endif %}
+
+    {% if messages %}
+        <div style="color: red; margin-top: 10px;">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

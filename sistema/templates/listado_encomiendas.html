@@ -13,7 +13,7 @@
                 <th>Descripción</th>
                 <th>Remitente</th>
                 <th>Destinatario</th>
-                <th>Estado</th>
+                <th>Estado</th> <!-- Estado actual de la encomienda -->
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -24,22 +24,15 @@
                 <td>{{ encomienda.descripcion }}</td>
                 <td>{{ encomienda.remitente.nombres }} {{ encomienda.remitente.apellidos }}</td>
                 <td>{{ encomienda.destinatario.nombres }} {{ encomienda.destinatario.apellidos }}</td>
-                <td>{{ encomienda.estado }}</td>
-                <td><a href="#">Ver detalles</a></td>
+                <td>{{ encomienda.estado }}</td> <!-- Muestra el estado actualizado -->
+                <td>
+                    <a href="{% url 'actualizar_estado_form' encomienda.id %}">
+                        Actualizar Estado
+                    </a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
-
-{% if messages %}
-    <div class="container mt-3">
-        {% for message in messages %}
-            <div class="alert alert-success">
-                {{ message }}
-            </div>
-        {% endfor %}
-    </div>
-{% endif %}
-
 {% endblock %}
