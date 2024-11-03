@@ -62,7 +62,7 @@ def registro_cliente(request):
         return redirect('listado_clientes')
     return render(request, 'registro_cliente.html', {'empleado': empleado})
 
-# Vista para registrar encomiendas
+# Vista para registrar encomiendas CORREGIR ESTA VIEW
 @empleado_requerido
 def registro_encomienda(request):
     empleado_id = request.session.get('empleado_id')
@@ -84,6 +84,7 @@ def registro_encomienda(request):
         estado = request.POST.get('estado')
         condicion_envio = request.POST.get('condicion_envio')
         cantidad_paquetes = request.POST.get('cantidad_paquetes')
+        clave_estatica = request.POST.get('clave_estatica')
 
         remitente_obj = Cliente.objects.get(id=remitente)
         destinatario_obj = Cliente.objects.get(id=destinatario)

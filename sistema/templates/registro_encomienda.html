@@ -8,10 +8,6 @@
 
     <form method="POST">
         {% csrf_token %}
-        <div class="form-group">
-            <label for="descripcion">Descripción:</label>
-            <input type="text" id="descripcion" name="descripcion" class="form-control" required>
-        </div><br>
 
         <div class="form-group">
             <label for="remitente">Remitente (ID del Cliente):</label>
@@ -48,17 +44,28 @@
             </select>
         </div><br>
 
+
+        <div class="form-group">
+            <label for="descripcion">Descripción:</label>
+            <input type="text" id="descripcion" name="descripcion" class="form-control" required>
+        </div><br>
+
         <div class="form-group">
             <label for="volumen">Volumen:</label>
-            <input type="number" id="volumen" name="volumen" class="form-control" step="0.01" required>
+            <input type="number" id="volumen" name="volumen" class="form-control" step="0.01" required oninput="calcularMonto()">
+        </div><br>
+
+        <div class="form-group">
+            <label for="monto">Monto:</label>
+            <input type="text" id="monto" name="monto" class="form-control" readonly>
         </div><br>
 
         <!-- Campo select para el estado -->
         <div class="form-group">
-            <label for="estado">Estado:</label>
+            <label for="estado">Estado de pago:</label>
             <select id="estado" name="estado" class="form-control" required>
-                <option value="no_entregado">No Entregado</option>
-                <option value="entregado">Entregado</option>
+                <option value="no_entregado">No cancelado</option>
+                <option value="entregado">Cancelado</option>
             </select>
         </div><br>
 
@@ -73,6 +80,11 @@
         </div><br>
 
         <div class="form-group">
+            <label for="clave_estatica">Clave:</label>
+            <input type="text" id="clave_estatica" name="clave_estatica" class="form-control" required>
+        </div><br>
+
+        <div class="form-group">
             <label for="cantidad_paquetes">Cantidad de Paquetes:</label>
             <input type="number" id="cantidad_paquetes" name="cantidad_paquetes" class="form-control" required>
         </div><br>
@@ -80,4 +92,12 @@
         <button type="submit" class="btn btn-primary">Registrar Encomienda</button>
     </form>
 </div>
+
+<script>
+    function calcularMonto() {
+        const volumen = parseFloat(document.getElementById('volumen').value) || 0;
+        const monto = volumen * 2.5;
+        document.getElementById('monto').value = monto.toFixed(2);
+    }
+</script>
 {% endblock %}
