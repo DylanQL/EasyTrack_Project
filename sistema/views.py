@@ -8,6 +8,13 @@ from django.shortcuts import redirect
 from django import forms
 from .models import Reclamo
 
+
+from django.shortcuts import render, redirect
+from .models import Contactanos
+from django.utils import timezone
+from django.contrib import messages
+
+
 # Decorador para verificar si el empleado está logueado
 def empleado_requerido(view_func):
     def wrapper(request, *args, **kwargs):
@@ -269,3 +276,25 @@ def enviar_reclamo(request):
         form = ReclamoForm()
     
     return render(request, 'reclamos.html', {'form': form})
+
+def contactanos(request):
+    if request.method == 'POST':
+        nombre = request.POST.get('nombre')
+        email = request.POST.get('email')
+        asunto = request.POST.get('asunto')
+        mensaje = request.POST.get('mensaje')
+
+        # Guardar el mensaje en la base de datos
+        Contactanos.objects.create(
+            nombre=nombre,
+            email=email,
+            asunto=asunto,
+            mensaje=mensaje,
+            fecha=timezone.now()
+        )
+
+        # Mensaje de éxito
+        messages.success(request, 'Tu mensaje ha sido enviado correctamente.')
+        return redirect('contactanos')  # Redirigir a la misma página después de enviar
+
+    return render(request, 'contactanos.html')

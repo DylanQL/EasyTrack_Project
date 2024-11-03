@@ -1,0 +1,3 @@
+PAGINAS FUNCIONALES:
+*Contatanos
+*Reclamos
