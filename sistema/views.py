@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.utils import timezone
 from django.contrib.auth.hashers import check_password
-from .models import Encomienda, Cliente, Empleado, Reclamo, Motivo, Terminal,Comprobante
+from .models import Encomienda, Cliente, Empleado, Reclamo, Motivo, Terminal,Comprobante, Seguridad
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 from django import forms
@@ -62,7 +62,6 @@ def registro_cliente(request):
         return redirect('listado_clientes')
     return render(request, 'registro_cliente.html', {'empleado': empleado})
 
-# Vista para registrar encomiendas CORREGIR ESTA VIEW
 @empleado_requerido
 def registro_encomienda(request):
     empleado_id = request.session.get('empleado_id')
@@ -73,45 +72,61 @@ def registro_encomienda(request):
         ('normal', 'Normal'),
         ('perecedero', 'Perecedero'),
     ]
+
     if request.method == "POST":
-        descripcion = request.POST.get('descripcion')
-        remitente = request.POST.get('remitente')
-        destinatario = request.POST.get('destinatario')
+        # Obtener datos del formulario
+        remitente_id = request.POST.get('remitente')
+        destinatario_id = request.POST.get('destinatario')
         placa_vehiculo = request.POST.get('placa_vehiculo')
         terminal_partida_id = request.POST.get('terminal_partida')
         terminal_destino_id = request.POST.get('terminal_destino')
-        volumen = request.POST.get('volumen')
-        estado = request.POST.get('estado')
+        descripcion = request.POST.get('descripcion')
+        volumen = float(request.POST.get('volumen'))
+        monto = volumen * 2.5  # Calculo del monto basado en el volumen
+        estado_pago = request.POST.get('estado_pago')
         condicion_envio = request.POST.get('condicion_envio')
-        cantidad_paquetes = request.POST.get('cantidad_paquetes')
         clave_estatica = request.POST.get('clave_estatica')
+        cantidad_paquetes = int(request.POST.get('cantidad_paquetes'))
 
-        remitente_obj = Cliente.objects.get(id=remitente)
-        destinatario_obj = Cliente.objects.get(id=destinatario)
-        terminal_partida_obj = Terminal.objects.get(id=terminal_partida_id)
-        terminal_destino_obj = Terminal.objects.get(id=terminal_destino_id)
-        fecha_salida = timezone.now()
-
-        nueva_encomienda = Encomienda(
+        # Crear y guardar la encomienda
+        encomienda = Encomienda.objects.create(
             descripcion=descripcion,
-            remitente=remitente_obj,
-            destinatario=destinatario_obj,
+            remitente=Cliente.objects.get(id=remitente_id),
+            destinatario=Cliente.objects.get(id=destinatario_id),
             placa_vehiculo=placa_vehiculo,
-            terminal_partida=terminal_partida_obj,
-            terminal_destino=terminal_destino_obj,
+            terminal_partida=Terminal.objects.get(id=terminal_partida_id),
+            terminal_destino=Terminal.objects.get(id=terminal_destino_id),
             volumen=volumen,
-            estado=estado,
+            estado="No entregado",
             condicion_envio=condicion_envio,
             cantidad_paquetes=cantidad_paquetes,
-            fecha_salida=fecha_salida,
             empleado_registro=empleado,
-            empleado_entrega=empleado
+            fecha_registro=timezone.now(),
         )
-        nueva_encomienda.save()
 
-        messages.success(request, 'Encomienda registrada con éxito.')
-        return redirect('listado_encomiendas')
-    return render(request, 'registro_encomienda.html', {'empleado': empleado, 'terminales': terminales, 'condiciones_envio': CONDICIONES_ENVIO})
+        # Crear y guardar el comprobante de pago
+        Comprobante.objects.create(
+            encomienda=encomienda,
+            estado_pago=estado_pago,
+            monto=monto,
+            fecha_pago=timezone.now()
+        )
+
+        # Crear y guardar la información de seguridad
+        Seguridad.objects.create(
+            encomienda=encomienda,
+            clave_habilitada="Deshabilitada",  # Puedes definir la lógica para este campo
+            clave_estatica=clave_estatica
+        )
+
+        messages.success(request, "Encomienda registrada con éxito.")
+        return redirect('listado_encomiendas')  # Redirigir al listado de encomiendas
+
+    return render(request, 'registro_encomienda.html', {
+        'terminales': terminales,
+        'condiciones_envio': CONDICIONES_ENVIO,
+    })
+
 
 # Vista para el listado de reclamos
 @empleado_requerido
