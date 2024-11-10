@@ -1,0 +1,20 @@
+{% extends "layout/base_empleado.html" %}
+
+{% block title %}Editar Número de Teléfono{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Editar Número de Teléfono para {{ cliente.nombres }} {{ cliente.apellidos }}</h1>
+    
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="telefono">Número de Teléfono:</label>
+            <input type="text" name="telefono" id="telefono" value="{{ cliente.telefono }}" class="form-control" required>
+        </div>
+        
+        <button type="submit" class="btn btn-success mt-3">Guardar Cambios</button>
+        <a href="{% url 'listado_clientes' %}" class="btn btn-secondary mt-3">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

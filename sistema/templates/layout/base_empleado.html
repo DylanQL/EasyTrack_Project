@@ -12,7 +12,9 @@
         <a href="{% url 'listado_clientes' %}">Listado Clientes</a>
         <a href="{% url 'listado_encomiendas' %}">Listado Encomiendas</a>
         <a href="{% url 'listado_reclamos' %}">Listado Reclamos</a>
-
+        <a href="{% url 'control_envios' %}">Control de envíos</a> <!-- Nuevo enlace -->
+        <a href="{% url 'index_cliente' %}">Rastrea tu encomienda</a>
+        
         <div class="navbar-right">
             {% if empleado %}
                 <p>Usuario: {{ empleado.nombres }} {{ empleado.apellidos }}</p>
@@ -29,3 +31,4 @@
     </div>
 </body>
 </html>
+

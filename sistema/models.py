@@ -87,15 +87,22 @@ class Comprobante(models.Model):
     encomienda = models.ForeignKey(Encomienda, on_delete=models.CASCADE)
     estado_pago = models.CharField(max_length=50)
     monto = models.DecimalField(max_digits=10, decimal_places=2)
-    fecha_pago = models.DateTimeField()
+    fecha_pago = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f"Comprobante {self.id} - {self.estado_pago}"
 
 class Seguridad(models.Model):
     encomienda = models.ForeignKey(Encomienda, on_delete=models.CASCADE)
-    clave_habilitada = models.CharField(max_length=128)
+    clave_habilitada = models.BooleanField(default=False)  # Cambiado a BooleanField
     clave_estatica = models.CharField(max_length=128)
 
     def __str__(self):
         return f"Seguridad para Encomienda {self.encomienda.id}"
+    
+
+class Vehiculo(models.Model):
+    placa_vehiculo = models.CharField(max_length=20, unique=True)  # Placa de vehículo única
+
+    def __str__(self):
+        return self.placa_vehiculo

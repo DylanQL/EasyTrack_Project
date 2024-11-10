@@ -1,4 +1,4 @@
-{% extends 'layout/base_empleado.html' %}
+{% extends "layout/base_empleado.html" %}
 
 {% block title %}Listado de Encomiendas{% endblock %}
 
@@ -29,6 +29,9 @@
                     <a href="{% url 'actualizar_estado_form' encomienda.id %}">
                         Actualizar Estado
                     </a>
+                    <a href="{% url 'ver_detalles_encomienda' encomienda.id %}">
+                        Ver más Detalles
+                    </a>                    
                 </td>
             </tr>
             {% endfor %}

@@ -5,20 +5,27 @@
 {% block content %}
     <h1>Rastrea tu encomienda</h1>
 
-    <form method="GET">
+    <!-- Formulario para ingresar el ID de la encomienda -->
+    <form method="GET" action="{% url 'index_cliente' %}">
         <label for="encomienda-id">Encomienda ID:</label>
-        <input type="text" id="encomienda-id" name="encomienda_id" placeholder="Ej: EE095575123">
+        <input type="text" id="encomienda-id" name="encomienda_id" placeholder="Ej: 123" value="{{ encomienda_id }}">
         <button type="submit">Buscar</button>
     </form>
 
+    <!-- Mostrar resultados si se encuentra la encomienda -->
     {% if encomienda %}
-        <h2>Detalles de la encomienda:</h2>
-        <p>Encomienda en terminal: 08/10/2024</p>
-        <p>Encomienda salió de terminal: 09/10/2024</p>
-        <p>Encomienda llegó a terminal destino: 10/10/2024</p>
-        <p>Encomienda lista para recoger: 10/10/2024</p>
-        <p>Encomienda entregada: 11/10/2024</p>
+        <h2>Historial de la Encomienda</h2>
+        <ul>
+            {% for estado, fecha in estados %}
+                {% if fecha %}
+                    <li>{{ estado }} &rarr; {{ fecha|date:"d/m/Y" }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
     {% else %}
-        <p>No se encontró ninguna encomienda con ese ID.</p>
+        {% if encomienda_id %}
+            <p>No se encontró ninguna encomienda con ese ID.</p>
+        {% endif %}
     {% endif %}
 {% endblock %}
+

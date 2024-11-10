@@ -18,5 +18,9 @@ urlpatterns = [
     path('actualizar_estado_form/<int:encomienda_id>/', views.actualizar_estado_form, name='actualizar_estado_form'),
     path('listado_encomiendas/', views.listado_encomiendas, name='listado_encomiendas'),
     path('enviar_reclamo/', views.enviar_reclamo, name='enviar_reclamo'),
+    path('encomienda/<int:encomienda_id>/detalles/', views.ver_detalles_encomienda, name='ver_detalles_encomienda'),
+    path('seguridad/<int:seguridad_id>/cambiar_estado/', views.cambiar_estado_clave, name='cambiar_estado_clave'),
+    path('editar-telefono/<int:cliente_id>/', views.editar_telefono_cliente, name='editar_telefono_cliente'),
+    path('control-envios/', views.control_envios, name='control_envios'),
 
 ]

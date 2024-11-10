@@ -1,0 +1,80 @@
+{% extends "layout/base_empleado.html" %}
+
+{% block title %}Detalles de Encomienda{% endblock %}
+
+{% block content %}
+<div style="font-family: Arial, sans-serif; padding: 20px;">
+    <h1>Detalles de la Encomienda</h1>
+
+    <h2>Información Básica</h2>
+    <p><strong>ID Encomienda:</strong> {{ encomienda.id }}</p>
+    <p><strong>Descripción:</strong> {{ encomienda.descripcion }}</p>
+    <p><strong>Remitente:</strong> {{ encomienda.remitente }}</p>
+    <p><strong>Destinatario:</strong> {{ encomienda.destinatario }}</p>
+    <p><strong>Placa Vehículo:</strong> {{ encomienda.placa_vehiculo }}</p>
+    <p><strong>Terminal de Partida:</strong> {{ encomienda.terminal_partida }}</p>
+    <p><strong>Terminal de Destino:</strong> {{ encomienda.terminal_destino }}</p>
+    <p><strong>Volumen:</strong> {{ encomienda.volumen }}</p>
+    <p><strong>Fecha de Salida:</strong> {{ encomienda.fecha_salida }}</p>
+    <p><strong>Fecha de Llegada:</strong> {{ encomienda.fecha_llegada }}</p>
+    <p><strong>Estado:</strong> {{ encomienda.estado }}</p>
+    <p><strong>Condición de Envío:</strong> {{ encomienda.condicion_envio }}</p>
+    <p><strong>Cantidad de Paquetes:</strong> {{ encomienda.cantidad_paquetes }}</p>
+    <p><strong>Fecha de Registro:</strong> {{ encomienda.fecha_registro }}</p>
+    <p><strong>Fecha de Entrega:</strong> {{ encomienda.fecha_entrega }}</p>
+    <p><strong>Empleado que Registró:</strong> {{ encomienda.empleado_registro }}</p>
+    <p><strong>Empleado que Entregó:</strong> {{ encomienda.empleado_entrega }}</p>
+
+    {% if comprobante %}
+        <h2>Comprobante</h2>
+        <p><strong>Estado de Pago:</strong> {{ comprobante.estado_pago }}</p>
+        <p><strong>Monto:</strong> {{ comprobante.monto }}</p>
+        <p><strong>Fecha de Pago:</strong> {{ comprobante.fecha_pago }}</p>
+    {% else %}
+        <p>No hay comprobante disponible para esta encomienda.</p>
+    {% endif %}
+
+
+
+
+    {% if reclamos %}
+        <h2>Reclamos</h2>
+        <ul>
+            {% for reclamo in reclamos %}
+                <li><strong>Motivo:</strong> {{ reclamo.motivo }} - <strong>Estado:</strong> {{ reclamo.estado }} - <strong>Fecha:</strong> {{ reclamo.fecha }}</li>
+                <p>{{ reclamo.descripcion }}</p>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No hay reclamos registrados para esta encomienda.</p>
+    {% endif %}
+
+    {% if seguridad %}
+    <h2>Seguridad</h2>
+    <p><strong>Clave Estática:</strong> {{ seguridad.clave_estatica }}</p>
+    <p><strong>Estado de la Clave:</strong> {{ seguridad.clave_habilitada|yesno:"Habilitada,Deshabilitada" }}</p>
+
+    <form action="{% url 'cambiar_estado_clave' seguridad.id %}" method="post" style="margin-top: 10px;">
+        {% csrf_token %}
+        
+        {% if seguridad.clave_habilitada %}
+            <button type="submit" style="background-color: red; color: white; padding: 10px 20px; border: none; border-radius: 5px;">
+                Deshabilitar Clave
+            </button>
+        {% else %}
+            <button type="submit" style="background-color: green; color: white; padding: 10px 20px; border: none; border-radius: 5px;">
+                Habilitar Clave
+            </button>
+        {% endif %}
+        
+    </form>
+{% else %}
+    <p>No hay información de seguridad disponible para esta encomienda.</p>
+{% endif %}
+
+
+    <a href="{% url 'listado_encomiendas' %}" >
+        Volver al Listado de Encomiendas
+    </a>
+</div>
+{% endblock %}

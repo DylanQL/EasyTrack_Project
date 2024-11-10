@@ -109,8 +109,9 @@ def registro_encomienda(request):
             encomienda=encomienda,
             estado_pago=estado_pago,
             monto=monto,
-            fecha_pago=timezone.now()
+            fecha_pago= timezone.now() if estado_pago == 'Pagado' else None
         )
+
 
         # Crear y guardar la información de seguridad
         Seguridad.objects.create(
@@ -147,7 +148,9 @@ def actualizar_estado_encomienda(request, encomienda_id):
     if request.method == 'POST':
         nuevo_estado = request.POST.get('estado')
         nuevo_estado_pago = request.POST.get('estado_pago')
+        # Actualizar el estado de la encomienda
         encomienda.estado = nuevo_estado
+        # Actualizar solo el estado de pago del comprobante
         if comprobante:
             comprobante.estado_pago = nuevo_estado_pago
             comprobante.save()
@@ -213,12 +216,31 @@ def login_empleado(request):
             messages.error(request, 'El correo ingresado no pertenece a ningún empleado registrado.')
     return render(request, 'login_empleado.html')
 
+@empleado_requerido
+def editar_telefono_cliente(request, cliente_id):
+    cliente = get_object_or_404(Cliente, id=cliente_id)
+    
+    if request.method == "POST":
+        nuevo_telefono = request.POST.get("telefono")
+        cliente.telefono = nuevo_telefono
+        cliente.save()
+        messages.success(request, "Número de teléfono actualizado con éxito.")
+        return redirect('listado_clientes')
+
+    return render(request, 'editar_telefono_cliente.html', {'cliente': cliente})
+
+@empleado_requerido
+def control_envios(request):
+    # Aquí puedes obtener los datos necesarios para mostrar en la página, por ejemplo:
+    encomiendas = Encomienda.objects.all()  # Obtener todas las encomiendas para el control
+    return render(request, 'control_envios.html', {'encomiendas': encomiendas})
+
 
 @empleado_requerido
 def actualizar_estado_form(request, encomienda_id=None):
     encomienda = None
     comprobante = None
-    monto = 'N/A'
+    monto = None
 
     if encomienda_id:
         encomienda = get_object_or_404(Encomienda, id=encomienda_id)
@@ -226,19 +248,16 @@ def actualizar_estado_form(request, encomienda_id=None):
         monto = comprobante.monto if comprobante else 'N/A'
     
     if request.method == 'POST' and encomienda:
-        # Obtener el estado de la encomienda y estado de pago del formulario
-        nuevo_estado = request.POST.get('estado')
+        # Obtener el estado de pago del formulario
         nuevo_estado_pago = request.POST.get('estado_pago')
-        
-        # Actualizar los datos de la encomienda y el comprobante
-        encomienda.estado = nuevo_estado
+
+        # Actualizar solo el estado de pago del comprobante
         if comprobante:
             comprobante.estado_pago = nuevo_estado_pago
             comprobante.save()
-        encomienda.save()
         
         # Mensaje de éxito y redirección al listado de encomiendas
-        messages.success(request, 'La encomienda se actualizó de manera exitosa.')
+        messages.success(request, 'El estado de pago se actualizó de manera exitosa.')
         return redirect('listado_encomiendas')
 
     return render(request, 'actualizar_estado_form.html', {
@@ -246,6 +265,7 @@ def actualizar_estado_form(request, encomienda_id=None):
         'comprobante': comprobante,
         'monto': monto
     })
+
 
 class ReclamoForm(forms.Form):
     encomienda_id = forms.CharField(
@@ -314,3 +334,55 @@ def contactanos(request):
         return redirect('contactanos')  # Redirigir a la misma página después de enviar
 
     return render(request, 'contactanos.html')
+
+
+def ver_detalles_encomienda(request, encomienda_id):
+    # Recupera el objeto Encomienda
+    encomienda = get_object_or_404(Encomienda, id=encomienda_id)
+    
+    # Recupera los objetos relacionados
+    comprobante = Comprobante.objects.filter(encomienda=encomienda).first()
+    seguridad = Seguridad.objects.filter(encomienda=encomienda).first()
+    reclamos = Reclamo.objects.filter(encomienda=encomienda)
+    
+    # Pasa estos objetos al template
+    context = {
+        'encomienda': encomienda,
+        'comprobante': comprobante,
+        'seguridad': seguridad,
+        'reclamos': reclamos,
+    }
+    return render(request, 'detalles_listado_encomienda.html', context)
+
+def cambiar_estado_clave(request, seguridad_id):
+    seguridad = get_object_or_404(Seguridad, id=seguridad_id)
+    seguridad.clave_habilitada = not seguridad.clave_habilitada  # Alterna entre True y False
+    seguridad.save()  # Guarda el cambio en la base de datos
+    return redirect('ver_detalles_encomienda', encomienda_id=seguridad.encomienda.id)
+
+def index_cliente(request):
+    encomienda_id = request.GET.get('encomienda_id')  # Obtener el ID de encomienda ingresado
+    encomienda = 000
+    estados = []
+
+    if encomienda_id:
+        try:
+            # Buscar la encomienda usando el campo `id`
+            encomienda = Encomienda.objects.get(id=int(encomienda_id))
+            
+            # Lista de estados con fechas correspondientes
+            estados = [
+                ("Encomienda en terminal", encomienda.fecha_registro),
+                ("Encomienda salió de terminal", encomienda.fecha_salida),
+                ("Encomienda llegó a terminal destino", encomienda.fecha_llegada),
+                ("Encomienda lista para recoger", encomienda.fecha_llegada),
+                ("Encomienda entregada", encomienda.fecha_entrega),
+            ]
+        except (Encomienda.DoesNotExist, ValueError):
+            encomienda = None  # No se encontró la encomienda o el ID no es válido
+
+    return render(request, 'index_cliente.html', {
+        'encomienda': encomienda,
+        'estados': estados,
+        'encomienda_id': encomienda_id,
+    })
