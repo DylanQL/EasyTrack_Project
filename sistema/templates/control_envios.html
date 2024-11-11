@@ -3,32 +3,47 @@
 {% block title %}Control de Envíos{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1>Control de Envíos</h1>
+<div style="text-align: center; font-family: Arial, sans-serif;">
+    <h1 style="font-weight: bold;">Control de envíos</h1>
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Descripción</th>
-                <th>Remitente</th>
-                <th>Destinatario</th>
-                <th>Estado</th>
-                <th>Fecha de Registro</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for encomienda in encomiendas %}
-            <tr>
-                <td>{{ encomienda.id }}</td>
-                <td>{{ encomienda.descripcion }}</td>
-                <td>{{ encomienda.remitente }}</td>
-                <td>{{ encomienda.destinatario }}</td>
-                <td>{{ encomienda.estado }}</td>
-                <td>{{ encomienda.fecha_registro }}</td>
-            </tr>
+    <form method="POST">
+        {% csrf_token %}
+        
+        <label for="vehiculo"><strong>PLACA VEHÍCULO:</strong></label>
+        <select id="vehiculo" name="vehiculo" onchange="actualizarBoton()">
+            {% for vehiculo in vehiculos %}
+                <option value="{{ vehiculo.id }}" data-estado="{{ vehiculo.estado_vehiculo }}">
+                    {{ vehiculo.placa_vehiculo }} - {{ vehiculo.estado_vehiculo }}
+                </option>
             {% endfor %}
-        </tbody>
-    </table>
+        </select>
+        <br><br>
+
+        <!-- Botón de Marcar Salida/Llegada -->
+        <button type="submit" id="boton-accion" style="background-color: black; color: white; font-weight: bold; padding: 10px 20px; border: 2px solid black; border-radius: 10px;">
+            Marcar Salida
+        </button>
+    </form>
 </div>
+
+<script>
+    function actualizarBoton() {
+        // Obtener el elemento select y el botón
+        const select = document.getElementById('vehiculo');
+        const boton = document.getElementById('boton-accion');
+
+        // Obtener el estado del vehículo seleccionado
+        const estadoVehiculo = select.options[select.selectedIndex].getAttribute('data-estado');
+
+        // Actualizar el texto del botón según el estado del vehículo
+        if (estadoVehiculo === "Dentro de terminal") {
+            boton.textContent = "Marcar Salida";
+        } else {
+            boton.textContent = "Marcar Entrada";
+        }
+    }
+
+    // Ejecutar la función al cargar la página para mostrar el estado inicial correcto
+    document.addEventListener("DOMContentLoaded", actualizarBoton);
+</script>
 {% endblock %}

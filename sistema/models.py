@@ -49,15 +49,27 @@ class Motivo(models.Model):
     def __str__(self):
         return self.descripcion
 
+class Vehiculo(models.Model):
+    placa_vehiculo = models.CharField(max_length=20, unique=True)  # Placa de vehículo única
+    estado_vehiculo = models.CharField(
+        max_length=20,
+        choices=[("Dentro de terminal", "Dentro de terminal"), ("Fuera de terminal", "Fuera de terminal")],
+        default="Dentro de terminal"
+    )
+
+    def __str__(self):
+        return f"{self.placa_vehiculo} - {self.estado_vehiculo}"
+
+
 class Encomienda(models.Model):
     descripcion = models.TextField()
     remitente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name="encomiendas_remitente")
     destinatario = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name="encomiendas_destinatario")
-    placa_vehiculo = models.CharField(max_length=20)
+    vehiculo = models.ForeignKey(Vehiculo, on_delete=models.CASCADE)  # Nuevo campo de relación
     terminal_partida = models.ForeignKey(Terminal, on_delete=models.CASCADE, related_name="terminal_partida")
     terminal_destino = models.ForeignKey(Terminal, on_delete=models.CASCADE, related_name="terminal_destino")
     volumen = models.DecimalField(max_digits=10, decimal_places=2)
-    fecha_salida = models.DateTimeField(null=True, blank=True)  # Hacerlo opcional
+    fecha_salida = models.DateTimeField(null=True, blank=True)
     fecha_llegada = models.DateTimeField(null=True, blank=True)
     estado = models.CharField(max_length=50)
     condicion_envio = models.CharField(max_length=50)
@@ -101,8 +113,3 @@ class Seguridad(models.Model):
         return f"Seguridad para Encomienda {self.encomienda.id}"
     
 
-class Vehiculo(models.Model):
-    placa_vehiculo = models.CharField(max_length=20, unique=True)  # Placa de vehículo única
-
-    def __str__(self):
-        return self.placa_vehiculo

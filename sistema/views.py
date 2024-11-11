@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.utils import timezone
 from django.contrib.auth.hashers import check_password
-from .models import Encomienda, Cliente, Empleado, Reclamo, Motivo, Terminal,Comprobante, Seguridad
+from .models import Encomienda, Cliente, Empleado, Reclamo, Motivo, Terminal,Comprobante, Seguridad, Vehiculo
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 from django import forms
@@ -67,6 +67,7 @@ def registro_encomienda(request):
     empleado_id = request.session.get('empleado_id')
     empleado = Empleado.objects.get(id=empleado_id)
     terminales = Terminal.objects.all()
+    vehiculos = Vehiculo.objects.all()  # Obtener todos los vehículos disponibles
     CONDICIONES_ENVIO = [
         ('fragil', 'Frágil'),
         ('normal', 'Normal'),
@@ -77,12 +78,12 @@ def registro_encomienda(request):
         # Obtener datos del formulario
         remitente_id = request.POST.get('remitente')
         destinatario_id = request.POST.get('destinatario')
-        placa_vehiculo = request.POST.get('placa_vehiculo')
+        vehiculo_id = request.POST.get('vehiculo')  # Obtener ID del vehículo seleccionado
         terminal_partida_id = request.POST.get('terminal_partida')
         terminal_destino_id = request.POST.get('terminal_destino')
         descripcion = request.POST.get('descripcion')
         volumen = float(request.POST.get('volumen'))
-        monto = volumen * 2.5  # Calculo del monto basado en el volumen
+        monto = volumen * 2.5
         estado_pago = request.POST.get('estado_pago')
         condicion_envio = request.POST.get('condicion_envio')
         clave_estatica = request.POST.get('clave_estatica')
@@ -93,7 +94,7 @@ def registro_encomienda(request):
             descripcion=descripcion,
             remitente=Cliente.objects.get(id=remitente_id),
             destinatario=Cliente.objects.get(id=destinatario_id),
-            placa_vehiculo=placa_vehiculo,
+            vehiculo=Vehiculo.objects.get(id=vehiculo_id),  # Relacionar con el vehículo
             terminal_partida=Terminal.objects.get(id=terminal_partida_id),
             terminal_destino=Terminal.objects.get(id=terminal_destino_id),
             volumen=volumen,
@@ -116,15 +117,18 @@ def registro_encomienda(request):
         # Crear y guardar la información de seguridad
         Seguridad.objects.create(
             encomienda=encomienda,
-            clave_habilitada="Deshabilitada",  # Puedes definir la lógica para este campo
+            clave_habilitada=False,  # Puedes definir la lógica para este campo
             clave_estatica=clave_estatica
         )
 
+        # Crear y guardar el comprobante de pago y otros objetos adicionales si es necesario...
+
         messages.success(request, "Encomienda registrada con éxito.")
-        return redirect('listado_encomiendas')  # Redirigir al listado de encomiendas
+        return redirect('listado_encomiendas')
 
     return render(request, 'registro_encomienda.html', {
         'terminales': terminales,
+        'vehiculos': vehiculos,
         'condiciones_envio': CONDICIONES_ENVIO,
     })
 
@@ -231,9 +235,28 @@ def editar_telefono_cliente(request, cliente_id):
 
 @empleado_requerido
 def control_envios(request):
-    # Aquí puedes obtener los datos necesarios para mostrar en la página, por ejemplo:
-    encomiendas = Encomienda.objects.all()  # Obtener todas las encomiendas para el control
-    return render(request, 'control_envios.html', {'encomiendas': encomiendas})
+    vehiculos = Vehiculo.objects.all()
+    if request.method == "POST":
+        vehiculo_id = request.POST.get("vehiculo")
+        vehiculo = get_object_or_404(Vehiculo, id=vehiculo_id)
+
+        # Alternar el estado del vehículo
+        if vehiculo.estado_vehiculo == "Dentro de terminal":
+            vehiculo.estado_vehiculo = "Fuera de terminal"
+            # Marcar la fecha de salida para encomiendas sin fecha de salida
+            Encomienda.objects.filter(vehiculo=vehiculo, fecha_salida__isnull=True).update(fecha_salida=timezone.now())
+        else:
+            vehiculo.estado_vehiculo = "Dentro de terminal"
+            # Marcar la fecha de llegada para encomiendas sin fecha de llegada
+            Encomienda.objects.filter(vehiculo=vehiculo, fecha_llegada__isnull=True).update(fecha_llegada=timezone.now())
+
+        vehiculo.save()
+        messages.success(request, "El estado del vehículo y las encomiendas han sido actualizados.")
+
+    return render(request, 'control_envios.html', {
+        'vehiculos': vehiculos,
+    })
+
 
 
 @empleado_requerido
