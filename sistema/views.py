@@ -8,7 +8,6 @@ from django.shortcuts import redirect
 from django import forms
 from .models import Reclamo
 
-
 from django.shortcuts import render, redirect
 from .models import Contactanos
 from django.utils import timezone
@@ -130,6 +129,7 @@ def registro_encomienda(request):
         'terminales': terminales,
         'vehiculos': vehiculos,
         'condiciones_envio': CONDICIONES_ENVIO,
+        'empleado': empleado, 
     })
 
 
@@ -140,6 +140,8 @@ def listado_reclamos(request):
     empleado = Empleado.objects.get(id=empleado_id)
     reclamos = Reclamo.objects.all()
     return render(request, 'listado_reclamos.html', {'reclamos': reclamos, 'empleado': empleado})
+
+'''
 
 # Vista para actualizar el estado de una encomienda
 @empleado_requerido
@@ -168,11 +170,14 @@ def actualizar_estado_encomienda(request, encomienda_id):
         'empleado': empleado
     })
 
+
+
 @empleado_requerido
 def estado_actualizado(request):
     empleado_id = request.session.get('empleado_id')
     empleado = Empleado.objects.get(id=empleado_id)
     return render(request, 'estado_actualizado.html', {'empleado': empleado})
+'''
 
 # Vista para cerrar la sesión del empleado
 @empleado_requerido
@@ -236,6 +241,8 @@ def editar_telefono_cliente(request, cliente_id):
 @empleado_requerido
 def control_envios(request):
     vehiculos = Vehiculo.objects.all()
+    empleado_id = request.session.get('empleado_id')
+    empleado = Empleado.objects.get(id=empleado_id)
     if request.method == "POST":
         vehiculo_id = request.POST.get("vehiculo")
         vehiculo = get_object_or_404(Vehiculo, id=vehiculo_id)
@@ -255,7 +262,10 @@ def control_envios(request):
 
     return render(request, 'control_envios.html', {
         'vehiculos': vehiculos,
+        'empleado': empleado,  
     })
+
+
 
 
 
@@ -268,26 +278,29 @@ def actualizar_estado_form(request, encomienda_id=None):
     if encomienda_id:
         encomienda = get_object_or_404(Encomienda, id=encomienda_id)
         comprobante = Comprobante.objects.filter(encomienda=encomienda).first()
-        monto = comprobante.monto if comprobante else 'N/A'
+        monto = comprobante.monto if comprobante else 'Error'
     
     if request.method == 'POST' and encomienda:
         # Obtener el estado de pago del formulario
         nuevo_estado_pago = request.POST.get('estado_pago')
 
-        # Actualizar solo el estado de pago del comprobante
         if comprobante:
             comprobante.estado_pago = nuevo_estado_pago
+            # Si el estado de pago es "Pagado", actualizamos la fecha de pago
+            if nuevo_estado_pago == "Pagado":
+                comprobante.fecha_pago = timezone.now()
             comprobante.save()
         
         # Mensaje de éxito y redirección al listado de encomiendas
         messages.success(request, 'El estado de pago se actualizó de manera exitosa.')
-        return redirect('listado_encomiendas')
+        return redirect('listado_encomiendas')  # Redirige a la lista de encomiendas o página adecuada
 
     return render(request, 'actualizar_estado_form.html', {
         'encomienda': encomienda,
         'comprobante': comprobante,
         'monto': monto
     })
+
 
 
 class ReclamoForm(forms.Form):
