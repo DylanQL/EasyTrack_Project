@@ -243,22 +243,34 @@ def control_envios(request):
     vehiculos = Vehiculo.objects.all()
     empleado_id = request.session.get('empleado_id')
     empleado = Empleado.objects.get(id=empleado_id)
+
     if request.method == "POST":
         vehiculo_id = request.POST.get("vehiculo")
         vehiculo = get_object_or_404(Vehiculo, id=vehiculo_id)
 
-        # Alternar el estado del vehículo
+        # Verificar el estado del vehículo para realizar la acción correspondiente
         if vehiculo.estado_vehiculo == "Dentro de terminal":
+            # Cambiar el estado del vehículo a "Fuera de terminal"
             vehiculo.estado_vehiculo = "Fuera de terminal"
-            # Marcar la fecha de salida para encomiendas sin fecha de salida
+
+            # Actualizar únicamente las encomiendas con fecha_salida en null
             Encomienda.objects.filter(vehiculo=vehiculo, fecha_salida__isnull=True).update(fecha_salida=timezone.now())
-        else:
+
+        elif vehiculo.estado_vehiculo == "Fuera de terminal":
+            # Cambiar el estado del vehículo a "Dentro de terminal"
             vehiculo.estado_vehiculo = "Dentro de terminal"
-            # Marcar la fecha de llegada para encomiendas sin fecha de llegada
-            Encomienda.objects.filter(vehiculo=vehiculo, fecha_llegada__isnull=True).update(fecha_llegada=timezone.now())
+
+            # Actualizar únicamente las encomiendas con:
+            # - fecha_llegada en null
+            # - fecha_salida no en null
+            Encomienda.objects.filter(
+                vehiculo=vehiculo,
+                fecha_llegada__isnull=True,
+                fecha_salida__isnull=False
+            ).update(fecha_llegada=timezone.now())
 
         vehiculo.save()
-        messages.success(request, "El estado del vehículo y las encomiendas han sido actualizados.")
+        messages.success(request, "El estado del vehículo y las encomiendas asociadas han sido actualizados correctamente.")
 
     return render(request, 'control_envios.html', {
         'vehiculos': vehiculos,
