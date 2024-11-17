@@ -10,7 +10,7 @@
     {% if messages %}
         <div>
             {% for message in messages %}
-                <p style="color: {% if message.tags == 'success' %}green{% else %}red{% endif %};">
+                <p>
                     {{ message }}
                 </p>
             {% endfor %}
@@ -41,7 +41,7 @@
 <!-- Tabla de vehículos -->
 <div style="margin-top: 30px; text-align: center;">
     <h2>Lista de Vehículos</h2>
-    <table border="1" style="margin: auto; border-collapse: collapse; width: 80%; font-family: Arial, sans-serif;">
+    <table style="margin: auto; border-collapse: collapse; width: 80%; font-family: Arial, sans-serif;">
         <thead>
             <tr style="background-color: #f2f2f2;">
                 <th style="padding: 10px;">Placa del Vehículo</th>

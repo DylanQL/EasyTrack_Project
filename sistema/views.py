@@ -150,43 +150,6 @@ def listado_reclamos(request):
     reclamos = Reclamo.objects.all()
     return render(request, 'listado_reclamos.html', {'reclamos': reclamos, 'empleado': empleado})
 
-'''
-
-# Vista para actualizar el estado de una encomienda
-@empleado_requerido
-def actualizar_estado_encomienda(request, encomienda_id):
-    empleado_id = request.session.get('empleado_id')
-    empleado = Empleado.objects.get(id=empleado_id)
-    encomienda = get_object_or_404(Encomienda, id=encomienda_id)
-    comprobante = Comprobante.objects.filter(encomienda=encomienda).first()
-
-    if request.method == 'POST':
-        nuevo_estado = request.POST.get('estado')
-        nuevo_estado_pago = request.POST.get('estado_pago')
-        # Actualizar el estado de la encomienda
-        encomienda.estado = nuevo_estado
-        # Actualizar solo el estado de pago del comprobante
-        if comprobante:
-            comprobante.estado_pago = nuevo_estado_pago
-            comprobante.save()
-        encomienda.save()
-        messages.success(request, 'La encomienda se actualizó de manera exitosa.')
-        return redirect('estado_actualizado')
-
-    return render(request, 'actualizar_estado_encomienda.html', {
-        'encomienda': encomienda,
-        'comprobante': comprobante,
-        'empleado': empleado
-    })
-
-
-
-@empleado_requerido
-def estado_actualizado(request):
-    empleado_id = request.session.get('empleado_id')
-    empleado = Empleado.objects.get(id=empleado_id)
-    return render(request, 'estado_actualizado.html', {'empleado': empleado})
-'''
 
 # Vista para cerrar la sesión del empleado
 @empleado_requerido
