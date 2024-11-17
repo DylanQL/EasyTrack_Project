@@ -66,7 +66,7 @@ def registro_encomienda(request):
     empleado_id = request.session.get('empleado_id')
     empleado = Empleado.objects.get(id=empleado_id)
     terminales = Terminal.objects.all()
-    vehiculos = Vehiculo.objects.all()  # Obtener todos los vehículos disponibles
+    vehiculos = Vehiculo.objects.all()
     CONDICIONES_ENVIO = [
         ('fragil', 'Frágil'),
         ('normal', 'Normal'),
@@ -75,9 +75,22 @@ def registro_encomienda(request):
 
     if request.method == "POST":
         # Obtener datos del formulario
-        remitente_id = request.POST.get('remitente')
-        destinatario_id = request.POST.get('destinatario')
-        vehiculo_id = request.POST.get('vehiculo')  # Obtener ID del vehículo seleccionado
+        remitente_dni = request.POST.get('remitente')
+        destinatario_dni = request.POST.get('destinatario')
+
+        try:
+            remitente = Cliente.objects.get(dni=remitente_dni)
+        except Cliente.DoesNotExist:
+            messages.error(request, f"Remitente con DNI {remitente_dni} no registrado.")
+            return redirect('registro_encomienda')
+
+        try:
+            destinatario = Cliente.objects.get(dni=destinatario_dni)
+        except Cliente.DoesNotExist:
+            messages.error(request, f"Destinatario con DNI {destinatario_dni} no registrado.")
+            return redirect('registro_encomienda')
+
+        vehiculo_id = request.POST.get('vehiculo')
         terminal_partida_id = request.POST.get('terminal_partida')
         terminal_destino_id = request.POST.get('terminal_destino')
         descripcion = request.POST.get('descripcion')
@@ -91,9 +104,9 @@ def registro_encomienda(request):
         # Crear y guardar la encomienda
         encomienda = Encomienda.objects.create(
             descripcion=descripcion,
-            remitente=Cliente.objects.get(id=remitente_id),
-            destinatario=Cliente.objects.get(id=destinatario_id),
-            vehiculo=Vehiculo.objects.get(id=vehiculo_id),  # Relacionar con el vehículo
+            remitente=remitente,
+            destinatario=destinatario,
+            vehiculo=Vehiculo.objects.get(id=vehiculo_id),
             terminal_partida=Terminal.objects.get(id=terminal_partida_id),
             terminal_destino=Terminal.objects.get(id=terminal_destino_id),
             volumen=volumen,
@@ -109,18 +122,15 @@ def registro_encomienda(request):
             encomienda=encomienda,
             estado_pago=estado_pago,
             monto=monto,
-            fecha_pago= timezone.now() if estado_pago == 'Pagado' else None
+            fecha_pago=timezone.now() if estado_pago == 'Pagado' else None
         )
-
 
         # Crear y guardar la información de seguridad
         Seguridad.objects.create(
             encomienda=encomienda,
-            clave_habilitada=False,  # Puedes definir la lógica para este campo
+            clave_habilitada=False,
             clave_estatica=clave_estatica
         )
-
-        # Crear y guardar el comprobante de pago y otros objetos adicionales si es necesario...
 
         messages.success(request, "Encomienda registrada con éxito.")
         return redirect('listado_encomiendas')
@@ -129,9 +139,8 @@ def registro_encomienda(request):
         'terminales': terminales,
         'vehiculos': vehiculos,
         'condiciones_envio': CONDICIONES_ENVIO,
-        'empleado': empleado, 
+        'empleado': empleado,
     })
-
 
 # Vista para el listado de reclamos
 @empleado_requerido

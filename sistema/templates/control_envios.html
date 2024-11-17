@@ -17,6 +17,7 @@
         </div>
     {% endif %}
 
+    <!-- Formulario para marcar salida/entrada -->
     <form method="POST">
         {% csrf_token %}
         
@@ -35,6 +36,32 @@
             Marcar Salida
         </button>
     </form>
+</div>
+
+<!-- Tabla de vehículos -->
+<div style="margin-top: 30px; text-align: center;">
+    <h2>Lista de Vehículos</h2>
+    <table border="1" style="margin: auto; border-collapse: collapse; width: 80%; font-family: Arial, sans-serif;">
+        <thead>
+            <tr style="background-color: #f2f2f2;">
+                <th style="padding: 10px;">Placa del Vehículo</th>
+                <th style="padding: 10px;">Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for vehiculo in vehiculos %}
+                <tr>
+                    <td style="padding: 10px;">{{ vehiculo.placa_vehiculo }}</td>
+                    <td style="padding: 10px;">{{ vehiculo.estado_vehiculo }}</td>
+
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3" style="padding: 10px; text-align: center;">No hay vehículos registrados.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 
 <script>
