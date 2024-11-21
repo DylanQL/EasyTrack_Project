@@ -47,19 +47,49 @@ def listado_encomiendas(request):
     return render(request, 'listado_encomiendas.html', {'encomiendas': encomiendas, 'empleado': empleado})
 
 # Vista para el registro de clientes
+import requests  # Importar requests para realizar la llamada a la API
+
 @empleado_requerido
 def registro_cliente(request):
     empleado_id = request.session.get('empleado_id')
     empleado = Empleado.objects.get(id=empleado_id)
+    nombres = ""
+    apellidos = ""
+
     if request.method == "POST":
         dni = request.POST.get('dni')
-        nombres = request.POST.get('nombres')
-        apellidos = request.POST.get('apellidos')
         telefono = request.POST.get('telefono')
+
+        # Llamada al API para obtener los nombres y apellidos
+        api_url = "https://api.consultasperu.com/api/v1/query"
+        api_token = "f90160913880fa6522394a2be4f6fb56ee60f706b6da5b1f56cf024557b4c1ea"
+        payload = {
+            "token": api_token,
+            "type_document": "dni",
+            "document_number": dni
+        }
+
+        try:
+            response = requests.post(api_url, json=payload)
+            if response.status_code == 200 and response.json().get('success'):
+                data = response.json().get('data', {})
+                nombres = data.get('name', '')
+                apellidos = data.get('surname', '')
+            else:
+                messages.error(request, f"Error al obtener datos del DNI: {response.json().get('message')}")
+                return render(request, 'registro_cliente.html', {'empleado': empleado})
+        except Exception as e:
+            messages.error(request, f"Error en la comunicación con la API: {str(e)}")
+            return render(request, 'registro_cliente.html', {'empleado': empleado})
+
+        # Crear un nuevo cliente en la base de datos
         nuevo_cliente = Cliente(dni=dni, nombres=nombres, apellidos=apellidos, telefono=telefono)
         nuevo_cliente.save()
+        messages.success(request, "Cliente registrado con éxito.")
         return redirect('listado_clientes')
+
     return render(request, 'registro_cliente.html', {'empleado': empleado})
+
 
 @empleado_requerido
 def registro_encomienda(request):
