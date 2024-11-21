@@ -390,6 +390,12 @@ def ver_detalles_encomienda(request, encomienda_id):
     # Recupera el objeto Encomienda
     encomienda = get_object_or_404(Encomienda, id=encomienda_id)
     
+    # Recupera el empleado logueado
+    empleado_id = request.session.get('empleado_id')
+    empleado = None
+    if empleado_id:
+        empleado = Empleado.objects.get(id=empleado_id)
+    
     # Recupera los objetos relacionados
     comprobante = Comprobante.objects.filter(encomienda=encomienda).first()
     seguridad = Seguridad.objects.filter(encomienda=encomienda).first()
@@ -401,14 +407,30 @@ def ver_detalles_encomienda(request, encomienda_id):
         'comprobante': comprobante,
         'seguridad': seguridad,
         'reclamos': reclamos,
+        'empleado': empleado,  # Pasar el empleado al template
     }
     return render(request, 'detalles_listado_encomienda.html', context)
 
+
+@empleado_requerido
 def cambiar_estado_clave(request, seguridad_id):
     seguridad = get_object_or_404(Seguridad, id=seguridad_id)
-    seguridad.clave_habilitada = not seguridad.clave_habilitada  # Alterna entre True y False
-    seguridad.save()  # Guarda el cambio en la base de datos
+    encomienda = seguridad.encomienda  # Obtener la encomienda asociada
+    
+    # Alternar el estado de la clave
+    seguridad.clave_habilitada = not seguridad.clave_habilitada
+    seguridad.save()
+    
+    # Actualizar el campo empleado_entrega en la encomienda
+    empleado_id = request.session.get('empleado_id')
+    if empleado_id:
+        empleado = Empleado.objects.get(id=empleado_id)
+        encomienda.empleado_entrega = empleado  # Registrar el empleado actual como quien hizo el cambio
+        encomienda.save()
+    
+    messages.success(request, "El estado de la clave y el empleado que realizó el cambio se han actualizado correctamente.")
     return redirect('ver_detalles_encomienda', encomienda_id=seguridad.encomienda.id)
+
 
 def index_cliente(request):
     encomienda_id = request.GET.get('encomienda_id')  # Obtener el ID de encomienda ingresado

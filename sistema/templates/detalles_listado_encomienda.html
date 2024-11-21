@@ -34,9 +34,6 @@
         <p>No hay comprobante disponible para esta encomienda.</p>
     {% endif %}
 
-
-
-
     {% if reclamos %}
         <h2>Reclamos</h2>
         <ul>
@@ -50,30 +47,28 @@
     {% endif %}
 
     {% if seguridad %}
-    <h2>Seguridad</h2>
-    <p><strong>Clave Estática:</strong> {{ seguridad.clave_estatica }}</p>
-    <p><strong>Estado de la Clave:</strong> {{ seguridad.clave_habilitada|yesno:"Habilitada,Deshabilitada" }}</p>
+        <h2>Seguridad</h2>
+        <p><strong>Clave Estática:</strong> {{ seguridad.clave_estatica }}</p>
+        <p><strong>Estado de la Clave:</strong> {{ seguridad.clave_habilitada|yesno:"Habilitada,Deshabilitada" }}</p>
 
-    <form action="{% url 'cambiar_estado_clave' seguridad.id %}" method="post" style="margin-top: 10px;">
-        {% csrf_token %}
-        
-        {% if seguridad.clave_habilitada %}
-            <button type="submit" style="background-color: red; color: white; padding: 10px 20px; border: none; border-radius: 5px;">
-                Deshabilitar Clave
-            </button>
-        {% else %}
-            <button type="submit" style="background-color: green; color: white; padding: 10px 20px; border: none; border-radius: 5px;">
-                Habilitar Clave
-            </button>
-        {% endif %}
-        
-    </form>
-{% else %}
-    <p>No hay información de seguridad disponible para esta encomienda.</p>
-{% endif %}
+        <form action="{% url 'cambiar_estado_clave' seguridad.id %}" method="post" style="margin-top: 10px;">
+            {% csrf_token %}
+            
+            {% if seguridad.clave_habilitada %}
+                <button type="submit" style="background-color: red; color: white; padding: 10px 20px; border: none; border-radius: 5px;">
+                    Deshabilitar Clave
+                </button>
+            {% else %}
+                <button type="submit" style="background-color: green; color: white; padding: 10px 20px; border: none; border-radius: 5px;">
+                    Habilitar Clave
+                </button>
+            {% endif %}
+        </form>
+    {% else %}
+        <p>No hay información de seguridad disponible para esta encomienda.</p>
+    {% endif %}
 
-
-    <a href="{% url 'listado_encomiendas' %}" >
+    <a href="{% url 'listado_encomiendas' %}" style="margin-top: 20px; display: inline-block;">
         Volver al Listado de Encomiendas
     </a>
 </div>
