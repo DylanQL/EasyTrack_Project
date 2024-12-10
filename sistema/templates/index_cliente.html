@@ -3,29 +3,40 @@
 {% block title %}Rastrea tu encomienda{% endblock %}
 
 {% block content %}
-    <h1>Rastrea tu encomienda</h1>
+<div class="tracking-container">
+    <h1 class="tracking-title">
+        <i class="fas fa-search"></i> Rastrea tu Encomienda
+    </h1>
 
     <!-- Formulario para ingresar el ID de la encomienda -->
-    <form method="GET" action="{% url 'index_cliente' %}">
-        <label for="encomienda-id">Encomienda ID:</label>
-        <input type="text" id="encomienda-id" name="encomienda_id" placeholder="Ej: 123" value="{{ encomienda_id }}">
-        <button type="submit">Buscar</button>
+    <form method="GET" action="{% url 'index_cliente' %}" class="tracking-form">
+        <div class="form-group">
+            <label for="encomienda-id"><i class="fas fa-barcode"></i> Encomienda ID:</label>
+            <input type="text" id="encomienda-id" name="encomienda_id" placeholder="Ej: 123" value="{{ encomienda_id }}" required>
+        </div>
+        <button type="submit" class="btn-buscar">
+            <i class="fas fa-search"></i> Buscar
+        </button>
     </form>
 
     <!-- Mostrar resultados si se encuentra la encomienda -->
     {% if encomienda %}
-        <h2>Historial de la Encomienda</h2>
-        <ul>
+        <h2 class="tracking-subtitle">
+            <i class="fas fa-history"></i> Historial de la Encomienda
+        </h2>
+        <ul class="tracking-list">
             {% for estado, fecha in estados %}
                 {% if fecha %}
-                    <li>{{ estado }} &rarr; {{ fecha|date:"d/m/Y" }}</li>
+                    <li>
+                        <i class="fas fa-circle"></i> {{ estado }} &rarr; {{ fecha|date:"d/m/Y H:i" }}
+                    </li>
                 {% endif %}
             {% endfor %}
         </ul>
     {% else %}
         {% if encomienda_id %}
-            <p>No se encontró ninguna encomienda con ese ID.</p>
+            <p class="no-results">No se encontró ninguna encomienda con ese ID.</p>
         {% endif %}
     {% endif %}
+</div>
 {% endblock %}
-

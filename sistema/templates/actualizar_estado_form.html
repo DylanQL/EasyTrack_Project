@@ -3,51 +3,57 @@
 {% block title %}Actualizar Estado{% endblock %}
 
 {% block content %}
-<div style="text-align: center; font-family: Arial, sans-serif;">
-    <h1 style="font-weight: bold;">ACTUALIZAR ESTADO</h1>
+<div class="update-status-container">
+    <h1 class="update-status-title">
+        <i class="fas fa-edit"></i> ACTUALIZAR ESTADO
+    </h1>
 
     {% if encomienda %}
         <!-- Formulario de actualización del estado de la encomienda -->
-        <form method="POST" action="{% url 'actualizar_estado_form' encomienda.id %}" style="display: inline-block; text-align: left;">
+        <form method="POST" action="{% url 'actualizar_estado_form' encomienda.pk_encomienda_id %}" class="update-status-form">
             {% csrf_token %}
             
-            <label><strong>ID ENCOMIENDA:</strong></label>
-            <span>{{ encomienda.id }}</span>
-            <input type="hidden" name="id" value="{{ encomienda.id }}">
-            <br><br>
+            <div class="form-group">
+                <label for="encomienda-id"><strong><i class="fas fa-barcode"></i> ID ENCOMIENDA:</strong></label>
+                <span id="encomienda-id">{{ encomienda.pk_encomienda_id }}</span>
+                <input type="hidden" name="id" value="{{ encomienda.pk_encomienda_id }}">
+            </div>
 
-            <!-- Campo "Estado de Pago" como un combo box -->
-            <label><strong>ESTADO DE PAGO:</strong></label>
-            <select name="estado_pago" style="font-weight: bold; color: olive;" {% if comprobante and comprobante.estado_pago == "Pagado" %}disabled{% endif %}>
-                <option value="No pagado" {% if comprobante and comprobante.estado_pago == "No pagado" %}selected{% endif %}>NO PAGADO</option>
-                <option value="Pagado" {% if comprobante and comprobante.estado_pago == "Pagado" %}selected{% endif %}>PAGADO</option>
-            </select>
-            <br><br>
+            <div class="form-group">
+                <label for="estado-pago"><strong><i class="fas fa-money-check-alt"></i> ESTADO DE PAGO:</strong></label>
+                <select id="estado-pago" name="estado_pago" class="estado-pago-select" {% if comprobante and comprobante.estado_pago == "Pagado" %}disabled{% endif %}>
+                    <option value="No pagado" {% if comprobante and comprobante.estado_pago == "No pagado" %}selected{% endif %}>NO PAGADO</option>
+                    <option value="Pagado" {% if comprobante and comprobante.estado_pago == "Pagado" %}selected{% endif %}>PAGADO</option>
+                </select>
+            </div>
 
-            <label><strong>MONTO:</strong></label>
-            <span>{{ monto }}</span>
-            <br><br>
+            <div class="form-group">
+                <label for="monto"><strong><i class="fas fa-dollar-sign"></i> MONTO:</strong></label>
+                <span id="monto">{{ monto }}</span>
+            </div>
 
-            <!-- Botón de Actualizar Estado solo si el estado de pago no es "Pagado" -->
-            {% if comprobante and comprobante.estado_pago != "Pagado" %}
-                <button type="submit" style="background-color: red; color: white; font-weight: bold; padding: 10px 20px; border: 2px solid black; border-radius: 10px;">
-                    ACTUALIZAR ESTADO
-                </button>
-            {% endif %}
-            
-            <!-- Botón de Cancelar -->
-            <a href="{% url 'listado_encomiendas' %}" style="background-color: gray; color: white; font-weight: bold; padding: 10px 20px; text-decoration: none; border: 2px solid black; border-radius: 10px; margin-left: 10px;">
-                CANCELAR
-            </a>
+            <div class="form-actions">
+                <!-- Botón de Actualizar Estado solo si el estado de pago no es "Pagado" -->
+                {% if comprobante and comprobante.estado_pago != "Pagado" %}
+                    <button type="submit" class="btn-update">
+                        <i class="fas fa-check"></i> ACTUALIZAR ESTADO
+                    </button>
+                {% endif %}
+                
+                <!-- Botón de Cancelar -->
+                <a href="{% url 'listado_encomiendas' %}" class="btn-cancel">
+                    <i class="fas fa-times"></i> CANCELAR
+                </a>
+            </div>
         </form>
     {% else %}
-        <p>No se ha encontrado la encomienda.</p>
+        <p class="no-encomienda">No se ha encontrado la encomienda.</p>
     {% endif %}
 
     {% if messages %}
-        <div style="color: red; margin-top: 10px;">
+        <div class="messages">
             {% for message in messages %}
-                <p>{{ message }}</p>
+                <p class="message">{{ message }}</p>
             {% endfor %}
         </div>
     {% endif %}

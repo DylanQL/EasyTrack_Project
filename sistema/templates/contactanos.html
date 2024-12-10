@@ -3,30 +3,49 @@
 {% block title %}Contáctanos{% endblock %}
 
 {% block content %}
-    <h1>Contáctanos</h1>
-    <p>Si tienes alguna pregunta, comentario o necesitas más información sobre nuestros servicios, no dudes en contactarnos.</p>
+<div class="contact-container">
+    <h1 class="contact-title">
+        <i class="fas fa-envelope"></i> Contáctanos
+    </h1>
+    <p class="contact-description">
+        Si tienes alguna pregunta, comentario o necesitas más información sobre nuestros servicios, no dudes en contactarnos.
+    </p>
 
     <!-- Mostrar mensaje de éxito si el formulario fue enviado -->
     {% if messages %}
-        {% for message in messages %}
-            <div>{{ message }}</div>
-        {% endfor %}
+        <div class="messages">
+            {% for message in messages %}
+                <p class="message">{{ message }}</p>
+            {% endfor %}
+        </div>
     {% endif %}
 
-    <form action="{% url 'contactanos' %}" method="post">
+    <form action="{% url 'contactanos' %}" method="post" class="contact-form">
         {% csrf_token %}
-        <label for="nombre">Nombre:</label><br>
-        <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required><br>
 
-        <label for="email">Correo Electrónico:</label><br>
-        <input type="email" id="email" name="email" placeholder="Tu correo" required><br>
+        <div class="form-group">
+            <label for="nombre"><i class="fas fa-user"></i> Nombre:</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+        </div>
 
-        <label for="asunto">Asunto:</label><br>
-        <input type="text" id="asunto" name="asunto" placeholder="Asunto" required><br>
+        <div class="form-group">
+            <label for="email"><i class="fas fa-envelope"></i> Correo Electrónico:</label>
+            <input type="email" id="email" name="email" placeholder="Tu correo" required>
+        </div>
 
-        <label for="mensaje">Mensaje:</label><br>
-        <textarea id="mensaje" name="mensaje" placeholder="Escribe tu mensaje aquí..." required></textarea><br>
+        <div class="form-group">
+            <label for="asunto"><i class="fas fa-clipboard"></i> Asunto:</label>
+            <input type="text" id="asunto" name="asunto" placeholder="Asunto" required>
+        </div>
 
-        <button type="submit">Enviar</button>
+        <div class="form-group">
+            <label for="mensaje"><i class="fas fa-comment"></i> Mensaje:</label>
+            <textarea id="mensaje" name="mensaje" placeholder="Escribe tu mensaje aquí..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">
+            <i class="fas fa-paper-plane"></i> Enviar
+        </button>
     </form>
+</div>
 {% endblock %}

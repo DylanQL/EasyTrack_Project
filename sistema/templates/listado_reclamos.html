@@ -3,26 +3,28 @@
 {% block title %}Listado de Reclamos{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1>Listado de Reclamos</h1>
+<div class="reclamos-list-container">
+    <h1 class="reclamos-list-title">
+        <i class="fas fa-exclamation-triangle"></i> Listado de Reclamos
+    </h1>
 
-    <table class="table table-bordered table-striped">
+    <table class="reclamos-table">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Encomienda</th>
-                <th>Motivo</th>
-                <th>Descripción</th>
-                <th>Fecha</th>
-                <th>Estado</th>
+                <th><i class="fas fa-barcode"></i> ID</th>
+                <th><i class="fas fa-box"></i> Encomienda</th>
+                <th><i class="fas fa-question-circle"></i> Motivo</th>
+                <th><i class="fas fa-file-alt"></i> Descripción</th>
+                <th><i class="fas fa-calendar"></i> Fecha</th>
+                <th><i class="fas fa-check-circle"></i> Estado</th>
             </tr>
         </thead>
         <tbody>
             {% for reclamo in reclamos %}
             <tr>
-                <td>{{ reclamo.id }}</td>
-                <td>{{ reclamo.encomienda.descripcion }}</td>
-                <td>{{ reclamo.motivo.descripcion }}</td>
+                <td>{{ reclamo.pk_reclamo_id }}</td>
+                <td>{{ reclamo.fk_encomienda.descripcion }}</td>
+                <td>{{ reclamo.fk_motivo.descripcion }}</td>
                 <td>{{ reclamo.descripcion }}</td>
                 <td>{{ reclamo.fecha }}</td>
                 <td>{{ reclamo.estado }}</td>

@@ -3,21 +3,50 @@
 {% block title %}Reclamos{% endblock %}
 
 {% block content %}
-    <h1>Reclamos</h1>
-    <p>Si tienes algún problema con una encomienda, por favor llena el siguiente formulario para presentar un reclamo.</p>
+<div class="reclamos-container">
+    <h1 class="reclamos-title">
+        <i class="fas fa-exclamation-triangle"></i> Reclamos
+    </h1>
 
-    <form action="{% url 'enviar_reclamo' %}" method="post">
+    <p class="reclamos-description">
+        Si tienes algún problema con una encomienda, por favor llena el siguiente formulario para presentar un reclamo.
+    </p>
+
+    <form action="{% url 'enviar_reclamo' %}" method="post" class="reclamos-form">
         {% csrf_token %}
-        {{ form.as_p }}
 
-        <button type="submit">Enviar Reclamo</button>
+        <div class="form-group">
+            <label for="{{ form.encomienda_id.id_for_label }}">
+                <i class="fas fa-barcode"></i> {{ form.encomienda_id.label }}
+            </label>
+            {{ form.encomienda_id }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.motivo.id_for_label }}">
+                <i class="fas fa-question-circle"></i> {{ form.motivo.label }}
+            </label>
+            {{ form.motivo }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.descripcion.id_for_label }}">
+                <i class="fas fa-file-alt"></i> {{ form.descripcion.label }}
+            </label>
+            {{ form.descripcion }}
+        </div>
+
+        <button type="submit" class="btn-submit">
+            <i class="fas fa-paper-plane"></i> Enviar Reclamo
+        </button>
     </form>
 
     {% if messages %}
-        <div style="color: green; margin-top: 10px;">
+        <div class="messages">
             {% for message in messages %}
-                <p>{{ message }}</p>
+                <p class="message">{{ message }}</p>
             {% endfor %}
         </div>
     {% endif %}
+</div>
 {% endblock %}

@@ -3,125 +3,117 @@
 {% block title %}Registro de Encomienda{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1>Registrar Encomienda</h1>
+<div class="registro-encomienda-container">
+    <h1 class="registro-encomienda-title">
+        <i class="fas fa-box"></i> Registrar Encomienda
+    </h1>
 
     {% if messages %}
-        <ul class="list-group mb-3">
+        <ul class="messages">
             {% for message in messages %}
-                <li class="list-group-item list-group-item-{{ message.tags }}">{{ message }}</li>
+                <li class="message {{ message.tags }}">{{ message }}</li>
             {% endfor %}
         </ul>
     {% endif %}
 
-    <form method="POST">
+    <form method="POST" class="registro-encomienda-form">
         {% csrf_token %}
 
         <!-- Remitente -->
         <div class="form-group">
-            <label for="remitente">Remitente (DNI del Cliente):</label>
+            <label for="remitente"><i class="fas fa-user"></i> Remitente (DNI del Cliente):</label>
             <input type="text" id="remitente" name="remitente" class="form-control" required>
         </div>
-        <br>
 
         <!-- Destinatario -->
         <div class="form-group">
-            <label for="destinatario">Destinatario (DNI del Cliente):</label>
+            <label for="destinatario"><i class="fas fa-user"></i> Destinatario (DNI del Cliente):</label>
             <input type="text" id="destinatario" name="destinatario" class="form-control" required>
         </div>
-        <br>
 
         <!-- Vehículo -->
         <div class="form-group">
-            <label for="vehiculo">Vehículo:</label>
+            <label for="vehiculo"><i class="fas fa-truck"></i> Vehículo:</label>
             <select id="vehiculo" name="vehiculo" class="form-control" required>
                 {% for vehiculo in vehiculos %}
-                    <option value="{{ vehiculo.id }}">{{ vehiculo.placa_vehiculo }}</option>
+                    <option value="{{ vehiculo.pk_vehiculo_id }}">{{ vehiculo.placa_vehiculo }}</option>
                 {% endfor %}
             </select>
         </div>
-        <br>
 
         <!-- Terminal de Partida -->
         <div class="form-group">
-            <label for="terminal_partida">Terminal de Partida:</label>
+            <label for="terminal_partida"><i class="fas fa-map-marker-alt"></i> Terminal de Partida:</label>
             <select id="terminal_partida" name="terminal_partida" class="form-control" required>
                 {% for terminal in terminales %}
-                    <option value="{{ terminal.id }}">{{ terminal.nombre }}</option>
+                    <option value="{{ terminal.pk_terminal_id }}">{{ terminal.nombre }}</option>
                 {% endfor %}
             </select>
         </div>
-        <br>
 
         <!-- Terminal de Destino -->
         <div class="form-group">
-            <label for="terminal_destino">Terminal de Destino:</label>
+            <label for="terminal_destino"><i class="fas fa-map-marker-alt"></i> Terminal de Destino:</label>
             <select id="terminal_destino" name="terminal_destino" class="form-control" required>
                 {% for terminal in terminales %}
-                    <option value="{{ terminal.id }}">{{ terminal.nombre }}</option>
+                    <option value="{{ terminal.pk_terminal_id }}">{{ terminal.nombre }}</option>
                 {% endfor %}
             </select>
         </div>
-        <br>
 
         <!-- Descripción -->
         <div class="form-group">
-            <label for="descripcion">Descripción:</label>
+            <label for="descripcion"><i class="fas fa-file-alt"></i> Descripción:</label>
             <input type="text" id="descripcion" name="descripcion" class="form-control" required>
         </div>
-        <br>
 
         <!-- Volumen -->
         <div class="form-group">
-            <label for="volumen">Volumen:</label>
+            <label for="volumen"><i class="fas fa-cube"></i> Volumen:</label>
             <input type="number" id="volumen" name="volumen" class="form-control" step="0.01" required oninput="calcularMonto()">
         </div>
-        <br>
 
         <!-- Monto -->
         <div class="form-group">
-            <label for="monto">Monto:</label>
+            <label for="monto"><i class="fas fa-dollar-sign"></i> Monto:</label>
             <input type="text" id="monto" name="monto" class="form-control" readonly>
         </div>
-        <br>
 
         <!-- Estado de Pago -->
         <div class="form-group">
-            <label for="estado_pago">Estado de pago:</label>
+            <label for="estado_pago"><i class="fas fa-money-check-alt"></i> Estado de Pago:</label>
             <select id="estado_pago" name="estado_pago" class="form-control" required>
                 <option value="No pagado">No pagado</option>
                 <option value="Pagado">Pagado</option>
             </select>
         </div>
-        <br>
 
         <!-- Condición del Envío -->
         <div class="form-group">
-            <label for="condicion_envio">Condición del Envío:</label>
+            <label for="condicion_envio"><i class="fas fa-shipping-fast"></i> Condición del Envío:</label>
             <select id="condicion_envio" name="condicion_envio" class="form-control" required>
                 {% for key, value in condiciones_envio %}
                     <option value="{{ key }}">{{ value }}</option>
                 {% endfor %}
             </select>
         </div>
-        <br>
 
         <!-- Clave -->
         <div class="form-group">
-            <label for="clave_estatica">Clave:</label>
+            <label for="clave_estatica"><i class="fas fa-key"></i> Clave:</label>
             <input type="text" id="clave_estatica" name="clave_estatica" class="form-control" required>
         </div>
-        <br>
 
         <!-- Cantidad de Paquetes -->
         <div class="form-group">
-            <label for="cantidad_paquetes">Cantidad de Paquetes:</label>
+            <label for="cantidad_paquetes"><i class="fas fa-boxes"></i> Cantidad de Paquetes:</label>
             <input type="number" id="cantidad_paquetes" name="cantidad_paquetes" class="form-control" required>
         </div>
-        <br>
 
         <!-- Botón de Envío -->
-        <button type="submit" class="btn btn-primary">Registrar Encomienda</button>
+        <button type="submit" class="btn-registrar">
+            <i class="fas fa-check"></i> Registrar Encomienda
+        </button>
     </form>
 </div>
 

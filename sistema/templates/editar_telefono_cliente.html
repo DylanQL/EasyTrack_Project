@@ -3,18 +3,27 @@
 {% block title %}Editar Número de Teléfono{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1>Editar Número de Teléfono para {{ cliente.nombres }} {{ cliente.apellidos }}</h1>
-    
-    <form method="POST">
+<div class="editar-telefono-container">
+    <h1 class="editar-telefono-title">
+        <i class="fas fa-phone"></i> Editar Número de Teléfono para {{ cliente.nombres }} {{ cliente.apellidos }}
+    </h1>
+
+    <form method="POST" class="editar-telefono-form">
         {% csrf_token %}
+
         <div class="form-group">
-            <label for="telefono">Número de Teléfono:</label>
+            <label for="telefono"><i class="fas fa-mobile-alt"></i> Número de Teléfono:</label>
             <input type="text" name="telefono" id="telefono" value="{{ cliente.telefono }}" class="form-control" required>
         </div>
-        
-        <button type="submit" class="btn btn-success mt-3">Guardar Cambios</button>
-        <a href="{% url 'listado_clientes' %}" class="btn btn-secondary mt-3">Cancelar</a>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-guardar">
+                <i class="fas fa-save"></i> Guardar Cambios
+            </button>
+            <a href="{% url 'listado_clientes' %}" class="btn-cancelar">
+                <i class="fas fa-times"></i> Cancelar
+            </a>
+        </div>
     </form>
 </div>
 {% endblock %}

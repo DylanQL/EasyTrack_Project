@@ -3,35 +3,38 @@
 {% block title %}Listado de Encomiendas{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1>Listado de Encomiendas</h1>
+<div class="encomiendas-list-container">
+    <h1 class="encomiendas-list-title">
+        <i class="fas fa-box"></i> Listado de Encomiendas
+    </h1>
 
-    <table class="table table-bordered table-striped">
+    <table class="encomiendas-table">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Descripción</th>
-                <th>Remitente</th>
-                <th>Destinatario</th>
-                <th>Estado</th> <!-- Estado actual de la encomienda -->
-                <th>Acciones</th>
+                <th><i class="fas fa-barcode"></i> ID</th>
+                <th><i class="fas fa-file-alt"></i> Descripción</th>
+                <th><i class="fas fa-user"></i> Remitente</th>
+                <th><i class="fas fa-user"></i> Destinatario</th>
+                <th><i class="fas fa-check-circle"></i> Estado</th>
+                <th><i class="fas fa-cog"></i> Acciones</th>
             </tr>
         </thead>
         <tbody>
             {% for encomienda in encomiendas %}
             <tr>
-                <td>{{ encomienda.id }}</td>
+                <td>{{ encomienda.pk_encomienda_id }}</td>
                 <td>{{ encomienda.descripcion }}</td>
-                <td>{{ encomienda.remitente.nombres }} {{ encomienda.remitente.apellidos }}</td>
-                <td>{{ encomienda.destinatario.nombres }} {{ encomienda.destinatario.apellidos }}</td>
-                <td>{{ encomienda.estado }}</td> <!-- Muestra el estado actualizado -->
+                <td>{{ encomienda.fk_remitente.nombres }} {{ encomienda.fk_remitente.apellidos }}</td>
+                <td>{{ encomienda.fk_destinatario.nombres }} {{ encomienda.fk_destinatario.apellidos }}</td>
+                <td>{{ encomienda.estado }}</td>
                 <td>
-                    <a href="{% url 'actualizar_estado_form' encomienda.id %}">
-                        Actualizar Estado
+                    <a href="{% url 'actualizar_estado_form' encomienda.pk_encomienda_id %}" class="btn-accion">
+                        <i class="fas fa-edit"></i> Actualizar Estado
                     </a>
-                    <a href="{% url 'ver_detalles_encomienda' encomienda.id %}">
-                        Ver más Detalles
-                    </a>                    
+                    &nbsp;&nbsp;
+                    <a href="{% url 'ver_detalles_encomienda' encomienda.pk_encomienda_id %}" class="btn-accion">
+                        <i class="fas fa-eye"></i>
+                    </a>
                 </td>
             </tr>
             {% endfor %}

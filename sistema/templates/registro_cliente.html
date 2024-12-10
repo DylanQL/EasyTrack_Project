@@ -3,20 +3,27 @@
 {% block title %}Registro de Cliente{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2>Registro de Cliente</h2>
-    <form method="post">
+<div class="registro-cliente-container">
+    <h2 class="registro-cliente-title">
+        <i class="fas fa-user-plus"></i> Registro de Cliente
+    </h2>
+
+    <form method="post" class="registro-cliente-form">
         {% csrf_token %}
+
         <div class="form-group">
-            <label for="dni">DNI:</label>
+            <label for="dni"><i class="fas fa-id-card"></i> DNI:</label>
             <input type="text" class="form-control" id="dni" name="dni" placeholder="Ingrese DNI" required>
         </div>
 
         <div class="form-group">
-            <label for="telefono">Teléfono:</label>
+            <label for="telefono"><i class="fas fa-phone"></i> Teléfono:</label>
             <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Ingrese teléfono" required>
         </div>
-        <button type="submit" class="btn btn-primary">Registrar</button>
+
+        <button type="submit" class="btn-registrar">
+            <i class="fas fa-check"></i> Registrar
+        </button>
     </form>
 </div>
 {% endblock %}

@@ -2,17 +2,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.utils import timezone
 from django.contrib.auth.hashers import check_password
-from .models import Encomienda, Cliente, Empleado, Reclamo, Motivo, Terminal,Comprobante, Seguridad, Vehiculo
+from .models import Encomienda, Cliente, Empleado, Reclamo, Motivo, Terminal, Comprobante, Seguridad, Vehiculo, Contacto
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 from django import forms
 from .models import Reclamo
 
-from django.shortcuts import render, redirect
-from .models import Contactanos
-from django.utils import timezone
-from django.contrib import messages
-
+import requests  # Importar requests para realizar la llamada a la API
 
 # Decorador para verificar si el empleado está logueado
 def empleado_requerido(view_func):
@@ -26,33 +22,30 @@ def empleado_requerido(view_func):
 @empleado_requerido
 def panel_empleado(request):
     empleado_id = request.session.get('empleado_id')
-    empleado = Empleado.objects.get(id=empleado_id) if empleado_id else None
+    empleado = Empleado.objects.get(pk_empleado_id=empleado_id) if empleado_id else None
     return render(request, 'layout/base_empleado.html', {'empleado': empleado})
 
 # Vista para el listado de clientes
 @empleado_requerido
 def listado_clientes(request):
     empleado_id = request.session.get('empleado_id')
-    empleado = Empleado.objects.get(id=empleado_id)
+    empleado = Empleado.objects.get(pk_empleado_id=empleado_id)
     clientes = Cliente.objects.all()
     return render(request, 'listado_clientes.html', {'clientes': clientes, 'empleado': empleado})
 
 # Vista para el listado de encomiendas
-
 @empleado_requerido
 def listado_encomiendas(request):
     empleado_id = request.session.get('empleado_id')
-    empleado = Empleado.objects.get(id=empleado_id)
+    empleado = Empleado.objects.get(pk_empleado_id=empleado_id)
     encomiendas = Encomienda.objects.all()
     return render(request, 'listado_encomiendas.html', {'encomiendas': encomiendas, 'empleado': empleado})
 
 # Vista para el registro de clientes
-import requests  # Importar requests para realizar la llamada a la API
-
 @empleado_requerido
 def registro_cliente(request):
     empleado_id = request.session.get('empleado_id')
-    empleado = Empleado.objects.get(id=empleado_id)
+    empleado = Empleado.objects.get(pk_empleado_id=empleado_id)
     nombres = ""
     apellidos = ""
 
@@ -62,7 +55,7 @@ def registro_cliente(request):
 
         # Llamada al API para obtener los nombres y apellidos
         api_url = "https://api.consultasperu.com/api/v1/query"
-        api_token = "f90160913880fa6522394a2be4f6fb56ee60f706b6da5b1f56cf024557b4c1ea"
+        api_token = "66fae0c2197c40714c5bf2bc42fe6d2b34cdcd2999abaaa35e929671e87a409a"
         payload = {
             "token": api_token,
             "type_document": "dni",
@@ -91,10 +84,11 @@ def registro_cliente(request):
     return render(request, 'registro_cliente.html', {'empleado': empleado})
 
 
+
 @empleado_requerido
 def registro_encomienda(request):
     empleado_id = request.session.get('empleado_id')
-    empleado = Empleado.objects.get(id=empleado_id)
+    empleado = Empleado.objects.get(pk_empleado_id=empleado_id)
     terminales = Terminal.objects.all()
     vehiculos = Vehiculo.objects.all()
     CONDICIONES_ENVIO = [
@@ -124,32 +118,45 @@ def registro_encomienda(request):
         terminal_partida_id = request.POST.get('terminal_partida')
         terminal_destino_id = request.POST.get('terminal_destino')
         descripcion = request.POST.get('descripcion')
-        volumen = float(request.POST.get('volumen'))
-        monto = volumen * 2.5
+        volumen = request.POST.get('volumen')
         estado_pago = request.POST.get('estado_pago')
         condicion_envio = request.POST.get('condicion_envio')
         clave_estatica = request.POST.get('clave_estatica')
-        cantidad_paquetes = int(request.POST.get('cantidad_paquetes'))
+        cantidad_paquetes = request.POST.get('cantidad_paquetes')
+
+        # Validar que todos los campos requeridos estén presentes y sean válidos
+        if not (vehiculo_id and terminal_partida_id and terminal_destino_id and descripcion and volumen and estado_pago and condicion_envio and clave_estatica and cantidad_paquetes):
+            messages.error(request, "Todos los campos son obligatorios.")
+            return redirect('registro_encomienda')
+
+        try:
+            volumen = float(volumen)
+            cantidad_paquetes = int(cantidad_paquetes)
+        except (ValueError, TypeError):
+            messages.error(request, "Volumen y cantidad de paquetes deben ser números válidos.")
+            return redirect('registro_encomienda')
+
+        monto = volumen * 2.5
 
         # Crear y guardar la encomienda
         encomienda = Encomienda.objects.create(
             descripcion=descripcion,
-            remitente=remitente,
-            destinatario=destinatario,
-            vehiculo=Vehiculo.objects.get(id=vehiculo_id),
-            terminal_partida=Terminal.objects.get(id=terminal_partida_id),
-            terminal_destino=Terminal.objects.get(id=terminal_destino_id),
+            fk_remitente=remitente,
+            fk_destinatario=destinatario,
+            fk_vehiculo=Vehiculo.objects.get(pk_vehiculo_id=vehiculo_id),
+            fk_terminal_partida=Terminal.objects.get(pk_terminal_id=terminal_partida_id),
+            fk_terminal_destino=Terminal.objects.get(pk_terminal_id=terminal_destino_id),
             volumen=volumen,
             estado="No entregado",
             condicion_envio=condicion_envio,
             cantidad_paquetes=cantidad_paquetes,
-            empleado_registro=empleado,
+            fk_empleado_registro=empleado,
             fecha_registro=timezone.now(),
         )
 
         # Crear y guardar el comprobante de pago
         Comprobante.objects.create(
-            encomienda=encomienda,
+            fk_encomienda=encomienda,
             estado_pago=estado_pago,
             monto=monto,
             fecha_pago=timezone.now() if estado_pago == 'Pagado' else None
@@ -157,7 +164,7 @@ def registro_encomienda(request):
 
         # Crear y guardar la información de seguridad
         Seguridad.objects.create(
-            encomienda=encomienda,
+            fk_encomienda=encomienda,
             clave_habilitada=False,
             clave_estatica=clave_estatica
         )
@@ -176,10 +183,9 @@ def registro_encomienda(request):
 @empleado_requerido
 def listado_reclamos(request):
     empleado_id = request.session.get('empleado_id')
-    empleado = Empleado.objects.get(id=empleado_id)
+    empleado = Empleado.objects.get(pk_empleado_id=empleado_id)
     reclamos = Reclamo.objects.all()
     return render(request, 'listado_reclamos.html', {'reclamos': reclamos, 'empleado': empleado})
-
 
 # Vista para cerrar la sesión del empleado
 @empleado_requerido
@@ -218,7 +224,7 @@ def login_empleado(request):
         try:
             empleado = Empleado.objects.get(correo=email)
             if check_password(password, empleado.password):
-                request.session['empleado_id'] = empleado.id
+                request.session['empleado_id'] = empleado.pk_empleado_id  # Usar pk_empleado_id
                 messages.success(request, 'Sesión iniciada con éxito')
                 return redirect('panel_empleado')
             else:
@@ -229,7 +235,7 @@ def login_empleado(request):
 
 @empleado_requerido
 def editar_telefono_cliente(request, cliente_id):
-    cliente = get_object_or_404(Cliente, id=cliente_id)
+    cliente = get_object_or_404(Cliente, pk_cliente_id=cliente_id)  # Usar pk_cliente_id
     
     if request.method == "POST":
         nuevo_telefono = request.POST.get("telefono")
@@ -244,11 +250,11 @@ def editar_telefono_cliente(request, cliente_id):
 def control_envios(request):
     vehiculos = Vehiculo.objects.all()
     empleado_id = request.session.get('empleado_id')
-    empleado = Empleado.objects.get(id=empleado_id)
+    empleado = Empleado.objects.get(pk_empleado_id=empleado_id)
 
     if request.method == "POST":
         vehiculo_id = request.POST.get("vehiculo")
-        vehiculo = get_object_or_404(Vehiculo, id=vehiculo_id)
+        vehiculo = get_object_or_404(Vehiculo, pk_vehiculo_id=vehiculo_id)  # Usar pk_vehiculo_id en lugar de id
 
         # Verificar el estado del vehículo para realizar la acción correspondiente
         if vehiculo.estado_vehiculo == "Dentro de terminal":
@@ -256,7 +262,7 @@ def control_envios(request):
             vehiculo.estado_vehiculo = "Fuera de terminal"
 
             # Actualizar únicamente las encomiendas con fecha_salida en null
-            Encomienda.objects.filter(vehiculo=vehiculo, fecha_salida__isnull=True).update(fecha_salida=timezone.now())
+            Encomienda.objects.filter(fk_vehiculo=vehiculo, fecha_salida__isnull=True).update(fecha_salida=timezone.now())  # Usar fk_vehiculo en lugar de vehiculo
 
         elif vehiculo.estado_vehiculo == "Fuera de terminal":
             # Cambiar el estado del vehículo a "Dentro de terminal"
@@ -266,7 +272,7 @@ def control_envios(request):
             # - fecha_llegada en null
             # - fecha_salida no en null
             Encomienda.objects.filter(
-                vehiculo=vehiculo,
+                fk_vehiculo=vehiculo,  # Usar fk_vehiculo en lugar de vehiculo
                 fecha_llegada__isnull=True,
                 fecha_salida__isnull=False
             ).update(fecha_llegada=timezone.now())
@@ -279,19 +285,21 @@ def control_envios(request):
         'empleado': empleado,  
     })
 
-
-
-
-
 @empleado_requerido
 def actualizar_estado_form(request, encomienda_id=None):
     encomienda = None
     comprobante = None
     monto = None
 
+    # Recupera el empleado logueado
+    empleado_id = request.session.get('empleado_id')
+    empleado = None
+    if empleado_id:
+        empleado = Empleado.objects.get(pk_empleado_id=empleado_id)
+
     if encomienda_id:
-        encomienda = get_object_or_404(Encomienda, id=encomienda_id)
-        comprobante = Comprobante.objects.filter(encomienda=encomienda).first()
+        encomienda = get_object_or_404(Encomienda, pk_encomienda_id=encomienda_id)  # Usar pk_encomienda_id en lugar de id
+        comprobante = Comprobante.objects.filter(fk_encomienda=encomienda).first()  # Usar fk_encomienda en lugar de encomienda
         monto = comprobante.monto if comprobante else 'Error'
     
     if request.method == 'POST' and encomienda:
@@ -312,10 +320,9 @@ def actualizar_estado_form(request, encomienda_id=None):
     return render(request, 'actualizar_estado_form.html', {
         'encomienda': encomienda,
         'comprobante': comprobante,
-        'monto': monto
+        'monto': monto,
+        'empleado': empleado,
     })
-
-
 
 class ReclamoForm(forms.Form):
     encomienda_id = forms.CharField(
@@ -323,31 +330,53 @@ class ReclamoForm(forms.Form):
         label="ID de la Encomienda",
         widget=forms.TextInput(attrs={'placeholder': 'Ingresa el ID del pedido'}),
     )
-    motivo = forms.CharField(
-        max_length=100,
+    motivo = forms.ModelChoiceField(
+        queryset=Motivo.objects.all(),  # Mostrar todos los motivos disponibles
         label="Motivo del Reclamo",
-        widget=forms.TextInput(attrs={'placeholder': 'Especifica el motivo'}),
+        empty_label="Selecciona un motivo",
     )
     descripcion = forms.CharField(
         label="Descripción del Reclamo",
         widget=forms.Textarea(attrs={'placeholder': 'Describe tu reclamo...'}),
     )
+
+from django import forms
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import Encomienda, Motivo, Reclamo
+
+class ReclamoForm(forms.Form):
+    encomienda_id = forms.CharField(
+        max_length=10,
+        label="ID de la Encomienda",
+        widget=forms.TextInput(attrs={'placeholder': 'Ingresa el ID del pedido'}),
+    )
+    motivo = forms.ModelChoiceField(
+        queryset=Motivo.objects.all(),  # Mostrar todos los motivos disponibles
+        label="Motivo del Reclamo",
+        empty_label="Selecciona un motivo",
+    )
+    descripcion = forms.CharField(
+        label="Descripción del Reclamo",
+        widget=forms.Textarea(attrs={'placeholder': 'Describe tu reclamo...'}),
+    )
+
 def enviar_reclamo(request):
     if request.method == 'POST':
         form = ReclamoForm(request.POST)
         if form.is_valid():
             encomienda_id = form.cleaned_data['encomienda_id']
-            motivo = form.cleaned_data['motivo']
+            motivo = form.cleaned_data['motivo']  # Obtener el objeto Motivo seleccionado
             descripcion = form.cleaned_data['descripcion']
             
             try:
                 # Verificar si la encomienda existe
-                encomienda = Encomienda.objects.get(id=encomienda_id)
+                encomienda = Encomienda.objects.get(pk_encomienda_id=encomienda_id)  # Usar pk_encomienda_id en lugar de id
                 
                 # Crear el reclamo
                 Reclamo.objects.create(
-                    encomienda=encomienda,
-                    motivo=motivo,
+                    fk_encomienda=encomienda,  # Usar fk_encomienda en lugar de encomienda
+                    fk_motivo=motivo,  # Usar el objeto Motivo directamente
                     descripcion=descripcion,
                     estado='Pendiente'
                 )
@@ -371,7 +400,7 @@ def contactanos(request):
         mensaje = request.POST.get('mensaje')
 
         # Guardar el mensaje en la base de datos
-        Contactanos.objects.create(
+        Contacto.objects.create(  # Actualizado
             nombre=nombre,
             email=email,
             asunto=asunto,
@@ -385,21 +414,20 @@ def contactanos(request):
 
     return render(request, 'contactanos.html')
 
-
 def ver_detalles_encomienda(request, encomienda_id):
     # Recupera el objeto Encomienda
-    encomienda = get_object_or_404(Encomienda, id=encomienda_id)
+    encomienda = get_object_or_404(Encomienda, pk_encomienda_id=encomienda_id)  # Usar pk_encomienda_id en lugar de id
     
     # Recupera el empleado logueado
     empleado_id = request.session.get('empleado_id')
     empleado = None
     if empleado_id:
-        empleado = Empleado.objects.get(id=empleado_id)
+        empleado = Empleado.objects.get(pk_empleado_id=empleado_id)
     
     # Recupera los objetos relacionados
-    comprobante = Comprobante.objects.filter(encomienda=encomienda).first()
-    seguridad = Seguridad.objects.filter(encomienda=encomienda).first()
-    reclamos = Reclamo.objects.filter(encomienda=encomienda)
+    comprobante = Comprobante.objects.filter(fk_encomienda=encomienda).first()  # Usar fk_encomienda en lugar de encomienda
+    seguridad = Seguridad.objects.filter(fk_encomienda=encomienda).first()  # Usar fk_encomienda en lugar de encomienda
+    reclamos = Reclamo.objects.filter(fk_encomienda=encomienda)  # Usar fk_encomienda en lugar de encomienda
     
     # Pasa estos objetos al template
     context = {
@@ -414,8 +442,8 @@ def ver_detalles_encomienda(request, encomienda_id):
 
 @empleado_requerido
 def cambiar_estado_clave(request, seguridad_id):
-    seguridad = get_object_or_404(Seguridad, id=seguridad_id)
-    encomienda = seguridad.encomienda  # Obtener la encomienda asociada
+    seguridad = get_object_or_404(Seguridad, pk_seguridad_id=seguridad_id)  # Usar pk_seguridad_id en lugar de id
+    encomienda = seguridad.fk_encomienda  # Obtener la encomienda asociada
     
     # Alternar el estado de la clave
     seguridad.clave_habilitada = not seguridad.clave_habilitada
@@ -424,23 +452,23 @@ def cambiar_estado_clave(request, seguridad_id):
     # Actualizar el campo empleado_entrega en la encomienda
     empleado_id = request.session.get('empleado_id')
     if empleado_id:
-        empleado = Empleado.objects.get(id=empleado_id)
-        encomienda.empleado_entrega = empleado  # Registrar el empleado actual como quien hizo el cambio
+        empleado = Empleado.objects.get(pk_empleado_id=empleado_id)
+        encomienda.fk_empleado_entrega = empleado  # Registrar el empleado actual como quien hizo el cambio
         encomienda.save()
     
     messages.success(request, "El estado de la clave y el empleado que realizó el cambio se han actualizado correctamente.")
-    return redirect('ver_detalles_encomienda', encomienda_id=seguridad.encomienda.id)
+    return redirect('ver_detalles_encomienda', encomienda_id=encomienda.pk_encomienda_id)  # Usar pk_encomienda_id en lugar de id
 
 
 def index_cliente(request):
     encomienda_id = request.GET.get('encomienda_id')  # Obtener el ID de encomienda ingresado
-    encomienda = 000
+    encomienda = None
     estados = []
 
     if encomienda_id:
         try:
-            # Buscar la encomienda usando el campo `id`
-            encomienda = Encomienda.objects.get(id=int(encomienda_id))
+            # Buscar la encomienda usando el campo pk_encomienda_id
+            encomienda = Encomienda.objects.get(pk_encomienda_id=int(encomienda_id))
             
             # Lista de estados con fechas correspondientes
             estados = [
@@ -458,3 +486,39 @@ def index_cliente(request):
         'estados': estados,
         'encomienda_id': encomienda_id,
     })
+
+
+# views.py
+from django.shortcuts import render
+from django.utils import timezone  # Importa timezone para obtener la fecha y hora actual
+from .models import Encomienda, Seguridad
+
+def entrega_paquete(request):
+    message = None
+    if request.method == 'POST':
+        id_encomienda = request.POST.get('id_encomienda')
+        clave = request.POST.get('clave')
+
+        try:
+            encomienda = Encomienda.objects.get(pk_encomienda_id=id_encomienda)
+            seguridad = Seguridad.objects.get(fk_encomienda=encomienda)
+        except Encomienda.DoesNotExist:
+            message = 'ID de encomienda no existe.'
+            return render(request, 'validacion_contraseña.html', {'message': message})
+        except Seguridad.DoesNotExist:
+            message = 'No se encontró información de seguridad para esta encomienda.'
+            return render(request, 'validacion_contraseña.html', {'message': message})
+
+        if seguridad.clave_habilitada:
+            if seguridad.clave_estatica == clave:
+                # Actualiza el estado de la encomienda y la fecha de entrega
+                encomienda.estado = 'Entregado'
+                encomienda.fecha_entrega = timezone.now()  # Establece la fecha y hora actual
+                encomienda.save()
+                message = 'Contraseña aceptada correctamente. Encomienda marcada como entregada.'
+            else:
+                message = 'Contraseña incorrecta.'
+        else:
+            message = 'Contraseña no habilitada.'
+
+    return render(request, 'validacion_contraseña.html', {'message': message})

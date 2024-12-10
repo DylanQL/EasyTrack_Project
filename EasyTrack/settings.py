@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-8v(g8+fc01v&p(pmvch*j)e0b_81ot5^oha+ji8kt+edj(bm#%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -68,6 +68,7 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'EasyTrack.wsgi.application'
 
 
@@ -76,10 +77,15 @@ WSGI_APPLICATION = 'EasyTrack.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'Encomiendas_DB',
+        'USER': 'root',
+        'PASSWORD': '123456',
+        'HOST': 'localhost',  # o la dirección de tu servidor MySQL
+        'PORT': '3306',       # puerto por defecto de MySQL
     }
 }
+
 
 
 # Password validation
@@ -122,3 +128,23 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+# settings.py
+
+import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# URL para los archivos estáticos
+STATIC_URL = '/static/'
+
+# Directorios adicionales donde Django buscará archivos estáticos
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'sistema', 'static'),
+]
+
+# (Opcional) Directorio donde se recopilarán los archivos estáticos en producción
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')

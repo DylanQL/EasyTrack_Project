@@ -1,33 +1,56 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Panel de Empleado{% endblock %}</title>
+    <title>{% block title %}EasyTrack - Panel de Empleado{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
-<body>
-    <div class="navbar">
-        <a href="{% url 'registro_cliente' %}">Registrar Cliente</a>
-        <a href="{% url 'registro_encomienda' %}">Registrar Encomienda</a>
-        <a href="{% url 'listado_clientes' %}">Listado Clientes</a>
-        <a href="{% url 'listado_encomiendas' %}">Listado Encomiendas</a>
-        <a href="{% url 'listado_reclamos' %}">Listado Reclamos</a>
-        <a href="{% url 'control_envios' %}">Control de envíos</a> <!-- Nuevo enlace -->
-        
-        <div class="navbar-right">
-            {% if empleado %}
-                <p>Usuario: {{ empleado.nombres }} {{ empleado.apellidos }}</p>
-            {% else %}
-                <p>Usuario: Anónimo</p>
-            {% endif %}
-            <a href="{% url 'logout' %}">Cerrar Sesión</a>
-        </div>
-    </div>
+<body class="employee-dashboard">
+    <header class="header employee-header">
+        <nav class="navbar employee-navbar">
+            <div class="navbar-logo">
+                <a href="{% url 'panel_empleado' %}" class="logo-link">
+                    <i class="fas fa-truck-fast"></i>
+                    <span class="logo-text">EasyTrack</span>
+                </a>
+            </div>
+            <ul class="navbar-links">
+                <li><a href="{% url 'registro_cliente' %}" class="nav-link"><i class="fas fa-user-plus"></i> Registrar Cliente</a></li>
+                <li><a href="{% url 'registro_encomienda' %}" class="nav-link"><i class="fas fa-box"></i> Registrar Encomienda</a></li>
+                <li><a href="{% url 'listado_clientes' %}" class="nav-link"><i class="fas fa-users"></i> Listado Clientes</a></li>
+                <li><a href="{% url 'listado_encomiendas' %}" class="nav-link"><i class="fas fa-list"></i> Listado Encomiendas</a></li>
+                <li><a href="{% url 'listado_reclamos' %}" class="nav-link"><i class="fas fa-exclamation-triangle"></i> Listado Reclamos</a></li>
+                <li><a href="{% url 'control_envios' %}" class="nav-link"><i class="fas fa-shipping-fast"></i> Control de envíos</a></li>
+            </ul>
+            <div class="navbar-user">
+                {% if empleado %}
+                    <span class="user-info"><i class="fas fa-user"></i> {{ empleado.nombres }} {{ empleado.apellidos }}</span>
+                {% else %}
+                    <span class="user-info"><i class="fas fa-user-secret"></i> Usuario Anónimo</span>
+                {% endif %}
+                <a href="{% url 'logout' %}" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+            </div>
+            <div class="navbar-toggle" id="navbar-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </header>
 
-    <div class="content">
+    <main class="content employee-content">
         {% block content %}
         {% endblock %}
-    </div>
+    </main>
+
+    <footer class="footer employee-footer">
+        <div class="footer-content">
+            <p class="copyright">&copy; 2023 EasyTrack. Sistema interno de empleados.</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/main.js' %}"></script>
 </body>
 </html>
 

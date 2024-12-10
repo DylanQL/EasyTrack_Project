@@ -1,0 +1,1772 @@
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2c3e50;
+    --accent-color: #e74c3c;
+    --background-color: #ecf0f1;
+    --text-color: #333;
+    --light-text-color: #fff;
+    --hover-color: #2980b9;
+    --footer-bg-color: #34495e;
+    --box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--background-color);
+}
+
+.client-body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.header {
+    background-color: var(--primary-color);
+    padding: 1rem;
+    box-shadow: var(--box-shadow);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.navbar-logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo-link {
+    color: var(--light-text-color);
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.logo-text {
+    margin-left: 0.5rem;
+}
+
+.navbar-links {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-link {
+    color: var(--light-text-color);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-link:hover {
+    background-color: var(--hover-color);
+}
+
+.btn-login, .btn-logout {
+    background-color: var(--accent-color);
+    color: var(--light-text-color);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-login:hover, .btn-logout:hover {
+    background-color: #c0392b;
+}
+
+.navbar-toggle {
+    display: none;
+    font-size: 1.5rem;
+    color: var(--light-text-color);
+    cursor: pointer;
+}
+
+.content {
+    flex: 1;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer {
+    background-color: var(--footer-bg-color);
+    color: var(--light-text-color);
+    padding: 1rem;
+    text-align: center;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.copyright {
+    font-size: 0.9rem;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-link {
+    color: var(--light-text-color);
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.social-link:hover {
+    color: var(--primary-color);
+}
+
+/* Employee Dashboard Styles */
+.employee-dashboard {
+    background-color: #f4f7f9;
+}
+
+.employee-header {
+    background-color: var(--secondary-color);
+}
+
+.employee-navbar .nav-link:hover {
+    background-color: var(--primary-color);
+}
+
+.employee-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+}
+
+.navbar-user {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-info {
+    color: var(--light-text-color);
+    font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .navbar-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .navbar-links.active {
+        display: flex;
+    }
+
+    .navbar-links li {
+        margin: 0.5rem 0;
+    }
+
+    .navbar-toggle {
+        display: block;
+    }
+
+    .navbar-user {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-top: 1rem;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+/* Additional styles for form elements, tables, etc. can be added here */
+
+
+/* Contenedor principal */
+.update-status-container {
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Título */
+.update-status-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.update-status-title i {
+    margin-right: 0.5rem;
+}
+
+/* Grupo de formulario */
+.form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.form-group label i {
+    margin-right: 0.5rem;
+}
+
+.form-group span {
+    font-size: 1.2rem;
+    color: var(--text-color);
+}
+
+/* Selector de estado de pago */
+.estado-pago-select {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    color: olive;
+    font-weight: bold;
+}
+
+/* Acciones del formulario */
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-update, .btn-cancel {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-update {
+    background-color: var(--accent-color);
+    color: #fff;
+}
+
+.btn-update:hover {
+    background-color: #c0392b;
+}
+
+.btn-cancel {
+    background-color: #ccc;
+    color: #333;
+    text-decoration: none;
+}
+
+.btn-cancel:hover {
+    background-color: #bbb;
+}
+
+/* Mensajes */
+.messages {
+    margin-top: 1rem;
+}
+
+.messages .message {
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .update-status-container {
+        padding: 1rem;
+    }
+
+    .update-status-title {
+        font-size: 1.5rem;
+    }
+
+    .form-group span {
+        font-size: 1rem;
+    }
+
+    .btn-update, .btn-cancel {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+
+/* Contenedor principal */
+.contact-container {
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Título */
+.contact-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.contact-title i {
+    margin-right: 0.5rem;
+}
+
+/* Descripción */
+.contact-description {
+    font-size: 1rem;
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+}
+
+/* Formulario */
+.contact-form {
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.form-group label i {
+    margin-right: 0.5rem;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    color: var(--text-color);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Botón de enviar */
+.btn-submit {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--accent-color);
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-submit:hover {
+    background-color: #c0392b;
+}
+
+.btn-submit i {
+    margin-right: 0.5rem;
+}
+
+/* Mensajes */
+.messages {
+    margin-bottom: 1.5rem;
+}
+
+.messages .message {
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .contact-container {
+        padding: 1rem;
+    }
+
+    .contact-title {
+        font-size: 1.5rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+
+    .btn-submit {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+
+/* Contenedor principal */
+.control-envios-container {
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Título */
+.control-envios-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.control-envios-title i {
+    margin-right: 0.5rem;
+}
+
+/* Formulario */
+.control-envios-form {
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.form-group label i {
+    margin-right: 0.5rem;
+}
+
+.vehiculo-select {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    color: var(--text-color);
+}
+
+/* Botón de acción */
+.btn-accion {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--accent-color);
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-accion:hover {
+    background-color: #c0392b;
+}
+
+.btn-accion i {
+    margin-right: 0.5rem;
+}
+
+/* Mensajes */
+.messages {
+    margin-bottom: 1.5rem;
+}
+
+.messages .message {
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
+/* Tabla de vehículos */
+.vehiculos-table-container {
+    margin-top: 2rem;
+}
+
+.vehiculos-table-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--secondary-color);
+    margin-bottom: 1rem;
+}
+
+.vehiculos-table-title i {
+    margin-right: 0.5rem;
+}
+
+.vehiculos-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+    font-size: 1rem;
+}
+
+.vehiculos-table th,
+.vehiculos-table td {
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.vehiculos-table th {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+.vehiculos-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.no-vehiculos {
+    text-align: center;
+    font-style: italic;
+    color: #888;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .control-envios-container {
+        padding: 1rem;
+    }
+
+    .control-envios-title {
+        font-size: 1.5rem;
+    }
+
+    .vehiculo-select,
+    .btn-accion {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .vehiculos-table th,
+    .vehiculos-table td {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+}
+
+
+/* Contenedor principal */
+.encomienda-details-container {
+    font-family: 'Roboto', sans-serif;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Título */
+.encomienda-details-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.encomienda-details-title i {
+    margin-right: 0.5rem;
+}
+
+/* Información básica */
+.basic-info, .comprobante-info, .reclamos-info, .seguridad-info {
+    margin-bottom: 2rem;
+}
+
+.basic-info h2, .comprobante-info h2, .reclamos-info h2, .seguridad-info h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--secondary-color);
+    margin-bottom: 1rem;
+}
+
+.basic-info h2 i, .comprobante-info h2 i, .reclamos-info h2 i, .seguridad-info h2 i {
+    margin-right: 0.5rem;
+}
+
+.basic-info p, .comprobante-info p, .reclamos-info p, .seguridad-info p {
+    font-size: 1rem;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
+/* Reclamos */
+.reclamos-info ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.reclamos-info li {
+    margin-bottom: 1rem;
+}
+
+/* Formulario de seguridad */
+.seguridad-form {
+    margin-top: 1rem;
+}
+
+.btn-deshabilitar, .btn-habilitar {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-deshabilitar {
+    background-color: var(--accent-color);
+    color: #fff;
+}
+
+.btn-deshabilitar:hover {
+    background-color: #c0392b;
+}
+
+.btn-habilitar {
+    background-color: #27ae60;
+    color: #fff;
+}
+
+.btn-habilitar:hover {
+    background-color: #219653;
+}
+
+/* Botón de volver */
+.btn-volver {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--secondary-color);
+    color: #fff;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-volver:hover {
+    background-color: #1e2a38;
+}
+
+.btn-volver i {
+    margin-right: 0.5rem;
+}
+
+/* Mensajes */
+.no-comprobante, .no-reclamos, .no-seguridad {
+    color: #888;
+    font-style: italic;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .encomienda-details-container {
+        padding: 1rem;
+    }
+
+    .encomienda-details-title {
+        font-size: 1.5rem;
+    }
+
+    .basic-info h2, .comprobante-info h2, .reclamos-info h2, .seguridad-info h2 {
+        font-size: 1.2rem;
+    }
+
+    .basic-info p, .comprobante-info p, .reclamos-info p, .seguridad-info p {
+        font-size: 0.9rem;
+    }
+
+    .btn-deshabilitar, .btn-habilitar, .btn-volver {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+
+/* Contenedor principal */
+.editar-telefono-container {
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Título */
+.editar-telefono-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.editar-telefono-title i {
+    margin-right: 0.5rem;
+}
+
+/* Formulario */
+.editar-telefono-form {
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.form-group label i {
+    margin-right: 0.5rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    color: var(--text-color);
+}
+
+/* Acciones del formulario */
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-guardar, .btn-cancelar {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-guardar {
+    background-color: var(--accent-color);
+    color: #fff;
+}
+
+.btn-guardar:hover {
+    background-color: #c0392b;
+}
+
+.btn-cancelar {
+    background-color: #ccc;
+    color: #333;
+    text-decoration: none;
+}
+
+.btn-cancelar:hover {
+    background-color: #bbb;
+}
+
+.btn-guardar i, .btn-cancelar i {
+    margin-right: 0.5rem;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .editar-telefono-container {
+        padding: 1rem;
+    }
+
+    .editar-telefono-title {
+        font-size: 1.5rem;
+    }
+
+    .form-control {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+
+    .btn-guardar, .btn-cancelar {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+
+/* Contenedor principal */
+.tracking-container {
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Título */
+.tracking-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.tracking-title i {
+    margin-right: 0.5rem;
+}
+
+/* Formulario */
+.tracking-form {
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.form-group label i {
+    margin-right: 0.5rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    color: var(--text-color);
+}
+
+/* Botón de buscar */
+.btn-buscar {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--accent-color);
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-buscar:hover {
+    background-color: #c0392b;
+}
+
+.btn-buscar i {
+    margin-right: 0.5rem;
+}
+
+/* Subtítulo */
+.tracking-subtitle {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--secondary-color);
+    margin-bottom: 1rem;
+}
+
+.tracking-subtitle i {
+    margin-right: 0.5rem;
+}
+
+/* Lista de historial */
+.tracking-list {
+    list-style-type: none;
+    padding: 0;
+    text-align: left;
+}
+
+.tracking-list li {
+    font-size: 1rem;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.tracking-list li i {
+    margin-right: 0.5rem;
+    color: var(--accent-color);
+}
+
+/* Mensaje de no resultados */
+.no-results {
+    color: #888;
+    font-style: italic;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .tracking-container {
+        padding: 1rem;
+    }
+
+    .tracking-title {
+        font-size: 1.5rem;
+    }
+
+    .form-group input,
+    .btn-buscar {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+
+    .tracking-subtitle {
+        font-size: 1.2rem;
+    }
+
+    .tracking-list li {
+        font-size: 0.9rem;
+    }
+}
+
+
+/* Contenedor principal */
+.clientes-list-container {
+    font-family: 'Roboto', sans-serif;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Título */
+.clientes-list-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.clientes-list-title i {
+    margin-right: 0.5rem;
+}
+
+/* Tabla de clientes */
+.clientes-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+    font-size: 1rem;
+}
+
+.clientes-table th,
+.clientes-table td {
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.clientes-table th {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+.clientes-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.clientes-table th i,
+.clientes-table td i {
+    margin-right: 0.5rem;
+}
+
+/* Botón de editar */
+.btn-editar {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--accent-color);
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-editar:hover {
+    background-color: #c0392b;
+}
+
+.btn-editar i {
+    margin-right: 0.5rem;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .clientes-list-container {
+        padding: 1rem;
+    }
+
+    .clientes-list-title {
+        font-size: 1.5rem;
+    }
+
+    .clientes-table th,
+    .clientes-table td {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+
+    .btn-editar {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+}
+
+
+/* Contenedor principal */
+.encomiendas-list-container {
+    font-family: 'Roboto', sans-serif;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Título */
+.encomiendas-list-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.encomiendas-list-title i {
+    margin-right: 0.5rem;
+}
+
+/* Tabla de encomiendas */
+.encomiendas-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+    font-size: 1rem;
+}
+
+.encomiendas-table th,
+.encomiendas-table td {
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.encomiendas-table th {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+.encomiendas-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.encomiendas-table th i,
+.encomiendas-table td i {
+    margin-right: 0.5rem;
+}
+
+/* Botones de acción */
+.btn-accion {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--accent-color);
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 0.5rem;
+}
+
+.btn-accion:hover {
+    background-color: #c0392b;
+}
+
+.btn-accion i {
+    margin-right: 0.5rem;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .encomiendas-list-container {
+        padding: 1rem;
+    }
+
+    .encomiendas-list-title {
+        font-size: 1.5rem;
+    }
+
+    .encomiendas-table th,
+    .encomiendas-table td {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+
+    .btn-accion {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+        margin-right: 0.3rem;
+    }
+}
+
+
+
+/* Contenedor principal */
+.reclamos-list-container {
+    font-family: 'Roboto', sans-serif;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Título */
+.reclamos-list-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.reclamos-list-title i {
+    margin-right: 0.5rem;
+}
+
+/* Tabla de reclamos */
+.reclamos-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+    font-size: 1rem;
+}
+
+.reclamos-table th,
+.reclamos-table td {
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.reclamos-table th {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+.reclamos-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.reclamos-table th i,
+.reclamos-table td i {
+    margin-right: 0.5rem;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .reclamos-list-container {
+        padding: 1rem;
+    }
+
+    .reclamos-list-title {
+        font-size: 1.5rem;
+    }
+
+    .reclamos-table th,
+    .reclamos-table td {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+}
+
+
+/* Contenedor principal */
+.login-container {
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Título */
+.login-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.login-title i {
+    margin-right: 0.5rem;
+}
+
+/* Formulario */
+.login-form {
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.form-group label i {
+    margin-right: 0.5rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    color: var(--text-color);
+}
+
+/* Botón de inicio de sesión */
+.btn-login {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--accent-color);
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-login:hover {
+    background-color: #c0392b;
+}
+
+.btn-login i {
+    margin-right: 0.5rem;
+}
+
+/* Mensajes */
+.messages {
+    margin-bottom: 1.5rem;
+}
+
+.messages .message {
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .login-container {
+        padding: 1rem;
+    }
+
+    .login-title {
+        font-size: 1.5rem;
+    }
+
+    .form-group input,
+    .btn-login {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Contenedor principal */
+.about-us-container {
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Título */
+.about-us-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.about-us-title i {
+    margin-right: 0.5rem;
+}
+
+/* Descripción */
+.about-us-description {
+    font-size: 1rem;
+    color: var(--text-color);
+    margin-bottom: 2rem;
+}
+
+/* Misión y Visión */
+.mission-vision {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.mission, .vision {
+    text-align: left;
+    padding: 1rem;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mission h2, .vision h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--secondary-color);
+    margin-bottom: 1rem;
+}
+
+.mission h2 i, .vision h2 i {
+    margin-right: 0.5rem;
+}
+
+.mission p, .vision p {
+    font-size: 1rem;
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .about-us-container {
+        padding: 1rem;
+    }
+
+    .about-us-title {
+        font-size: 1.5rem;
+    }
+
+    .mission-vision {
+        gap: 1.5rem;
+    }
+
+    .mission h2, .vision h2 {
+        font-size: 1.2rem;
+    }
+
+    .mission p, .vision p {
+        font-size: 0.9rem;
+    }
+}
+
+/* Contenedor principal */
+.reclamos-container {
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Título */
+.reclamos-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.reclamos-title i {
+    margin-right: 0.5rem;
+}
+
+/* Descripción */
+.reclamos-description {
+    font-size: 1rem;
+    color: var(--text-color);
+    margin-bottom: 2rem;
+}
+
+/* Formulario */
+.reclamos-form {
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.form-group label i {
+    margin-right: 0.5rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    color: var(--text-color);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Botón de enviar */
+.btn-submit {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--accent-color);
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-submit:hover {
+    background-color: #c0392b;
+}
+
+.btn-submit i {
+    margin-right: 0.5rem;
+}
+
+/* Mensajes */
+.messages {
+    margin-top: 1.5rem;
+}
+
+.messages .message {
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .reclamos-container {
+        padding: 1rem;
+    }
+
+    .reclamos-title {
+        font-size: 1.5rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea,
+    .btn-submit {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Contenedor principal */
+.registro-cliente-container {
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Título */
+.registro-cliente-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.registro-cliente-title i {
+    margin-right: 0.5rem;
+}
+
+/* Formulario */
+.registro-cliente-form {
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.form-group label i {
+    margin-right: 0.5rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    color: var(--text-color);
+}
+
+/* Botón de registrar */
+.btn-registrar {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--accent-color);
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-registrar:hover {
+    background-color: #c0392b;
+}
+
+.btn-registrar i {
+    margin-right: 0.5rem;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .registro-cliente-container {
+        padding: 1rem;
+    }
+
+    .registro-cliente-title {
+        font-size: 1.5rem;
+    }
+
+    .form-control,
+    .btn-registrar {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+}
+
+
+/* Contenedor principal */
+.registro-encomienda-container {
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Título */
+.registro-encomienda-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.registro-encomienda-title i {
+    margin-right: 0.5rem;
+}
+
+/* Mensajes */
+.messages {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 1.5rem;
+}
+
+.messages .message {
+    padding: 0.5rem;
+    border-radius: 5px;
+    margin-bottom: 0.5rem;
+}
+
+.messages .message.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.messages .message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Formulario */
+.registro-encomienda-form {
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.form-group label i {
+    margin-right: 0.5rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    color: var(--text-color);
+}
+
+/* Botón de registrar */
+.btn-registrar {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--accent-color);
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-registrar:hover {
+    background-color: #c0392b;
+}
+
+.btn-registrar i {
+    margin-right: 0.5rem;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .registro-encomienda-container {
+        padding: 1rem;
+    }
+
+    .registro-encomienda-title {
+        font-size: 1.5rem;
+    }
+
+    .form-control,
+    .btn-registrar {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* ************************************************************************ */

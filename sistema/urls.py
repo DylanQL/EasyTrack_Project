@@ -23,4 +23,5 @@ urlpatterns = [
     path('editar-telefono/<int:cliente_id>/', views.editar_telefono_cliente, name='editar_telefono_cliente'),
     path('control-envios/', views.control_envios, name='control_envios'),
 
+    path('entrega-paquete/', views.entrega_paquete, name='entrega_paquete'),
 ]

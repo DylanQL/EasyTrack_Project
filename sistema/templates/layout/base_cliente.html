@@ -1,23 +1,51 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Cliente{% endblock %}</title>
+    <title>{% block title %}EasyTrack - Cliente{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
-<body>
+<body class="client-body">
+    <header class="header">
+        <nav class="navbar">
+            <div class="navbar-logo">
+                <a href="{% url 'panel_empleado' %}" class="logo-link">
+                    <i class="fas fa-truck-fast"></i>
+                    <span class="logo-text">EasyTrack</span>
+                </a>
+            </div>
+            <ul class="navbar-links">
+                <li><a href="{% url 'nosotros' %}" class="nav-link"><i class="fas fa-info-circle"></i> Nosotros</a></li>
+                <li><a href="{% url 'index_cliente' %}" class="nav-link"><i class="fas fa-search-location"></i> Rastrea tu encomienda</a></li>
+                <li><a href="{% url 'contactanos' %}" class="nav-link"><i class="fas fa-envelope"></i> Contáctanos</a></li>
+                <li><a href="{% url 'enviar_reclamo' %}" class="nav-link"><i class="fas fa-exclamation-circle"></i> Reclamos</a></li>
+                <li><a href="{% url 'login_empleado' %}" class="btn-login"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a></li>
+            </ul>
+            <div class="navbar-toggle" id="navbar-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </header>
 
-    <div class="navbar">
-        <a href="{% url 'nosotros' %}">Nosotros</a>
-        <a href="{% url 'index_cliente' %}">Rastrea tu encomienda</a>
-        <a href="{% url 'contactanos' %}">Contactanos</a>
-        <a href="{% url 'reclamos' %}">Reclamos</a>
-        <a href="{% url 'login_empleado' %}">Iniciar Sesión</a>
-    </div>
-
-    <div class="content">
+    <main class="content">
         {% block content %}{% endblock %}
-    </div>
+    </main>
 
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="copyright">&copy; 2023 EasyTrack. Todos los derechos reservados.</p>
+            <div class="social-links">
+                <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/main.js' %}"></script>
 </body>
 </html>
+

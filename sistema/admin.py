@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Cliente, Contactanos, Terminal, Empleado, Motivo, Encomienda, Reclamo, Comprobante, Seguridad, Vehiculo
+from .models import Cliente, Contacto, Terminal, Empleado, Motivo, Encomienda, Reclamo, Comprobante, Seguridad, Vehiculo
 
 # Personalización para Cliente
 class ClienteAdmin(admin.ModelAdmin):
@@ -8,9 +8,17 @@ class ClienteAdmin(admin.ModelAdmin):
 
 # Personalización para Encomienda
 class EncomiendaAdmin(admin.ModelAdmin):
-    list_display = ('descripcion', 'remitente', 'destinatario', 'estado', 'fecha_salida', 'fecha_llegada')
+    list_display = ('descripcion', 'get_remitente_nombres', 'get_destinatario_nombres', 'estado', 'fecha_salida', 'fecha_llegada')
     list_filter = ('estado', 'fecha_salida', 'fecha_llegada')
     search_fields = ('descripcion', 'remitente__nombres', 'destinatario__nombres')
+
+    def get_remitente_nombres(self, obj):
+        return f"{obj.remitente.nombres} {obj.remitente.apellidos}"
+    get_remitente_nombres.short_description = 'Remitente'
+
+    def get_destinatario_nombres(self, obj):
+        return f"{obj.destinatario.nombres} {obj.destinatario.apellidos}"
+    get_destinatario_nombres.short_description = 'Destinatario'
 
 # Personalización para Vehículo
 class VehiculoAdmin(admin.ModelAdmin):
@@ -20,7 +28,7 @@ class VehiculoAdmin(admin.ModelAdmin):
 
 # Registrar todos los modelos
 admin.site.register(Cliente, ClienteAdmin)
-admin.site.register(Contactanos)
+admin.site.register(Contacto)
 admin.site.register(Terminal)
 admin.site.register(Empleado)
 admin.site.register(Motivo)

@@ -3,61 +3,63 @@
 {% block title %}Control de Envíos{% endblock %}
 
 {% block content %}
-<div style="text-align: center; font-family: Arial, sans-serif;">
-    <h1 style="font-weight: bold;">Control de envíos</h1>
+<div class="control-envios-container">
+    <h1 class="control-envios-title">
+        <i class="fas fa-shipping-fast"></i> Control de Envíos
+    </h1>
 
     <!-- Mostrar mensajes de éxito o error -->
     {% if messages %}
-        <div>
+        <div class="messages">
             {% for message in messages %}
-                <p>
-                    {{ message }}
-                </p>
+                <p class="message">{{ message }}</p>
             {% endfor %}
         </div>
     {% endif %}
 
     <!-- Formulario para marcar salida/entrada -->
-    <form method="POST">
+    <form method="POST" class="control-envios-form">
         {% csrf_token %}
         
-        <label for="vehiculo"><strong>PLACA VEHÍCULO:</strong></label>
-        <select id="vehiculo" name="vehiculo" onchange="actualizarBoton()">
-            {% for vehiculo in vehiculos %}
-                <option value="{{ vehiculo.id }}" data-estado="{{ vehiculo.estado_vehiculo }}">
-                    {{ vehiculo.placa_vehiculo }} - {{ vehiculo.estado_vehiculo }}
-                </option>
-            {% endfor %}
-        </select>
-        <br><br>
+        <div class="form-group">
+            <label for="vehiculo"><strong><i class="fas fa-truck"></i> PLACA VEHÍCULO:</strong></label>
+            <select id="vehiculo" name="vehiculo" onchange="actualizarBoton()" class="vehiculo-select">
+                {% for vehiculo in vehiculos %}
+                    <option value="{{ vehiculo.pk_vehiculo_id }}" data-estado="{{ vehiculo.estado_vehiculo }}">
+                        {{ vehiculo.placa_vehiculo }} - {{ vehiculo.estado_vehiculo }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
 
         <!-- Botón de Marcar Salida/Llegada -->
-        <button type="submit" id="boton-accion" style="background-color: black; color: white; font-weight: bold; padding: 10px 20px; border: 2px solid black; border-radius: 10px;">
-            Marcar Salida
+        <button type="submit" id="boton-accion" class="btn-accion">
+            <i class="fas fa-sign-out-alt"></i> Marcar Salida
         </button>
     </form>
 </div>
 
 <!-- Tabla de vehículos -->
-<div style="margin-top: 30px; text-align: center;">
-    <h2>Lista de Vehículos</h2>
-    <table style="margin: auto; border-collapse: collapse; width: 80%; font-family: Arial, sans-serif;">
+<div class="vehiculos-table-container">
+    <h2 class="vehiculos-table-title">
+        <i class="fas fa-list"></i> Lista de Vehículos
+    </h2>
+    <table class="vehiculos-table">
         <thead>
-            <tr style="background-color: #f2f2f2;">
-                <th style="padding: 10px;">Placa del Vehículo</th>
-                <th style="padding: 10px;">Estado</th>
+            <tr>
+                <th>Placa del Vehículo</th>
+                <th>Estado</th>
             </tr>
         </thead>
         <tbody>
             {% for vehiculo in vehiculos %}
                 <tr>
-                    <td style="padding: 10px;">{{ vehiculo.placa_vehiculo }}</td>
-                    <td style="padding: 10px;">{{ vehiculo.estado_vehiculo }}</td>
-
+                    <td>{{ vehiculo.placa_vehiculo }}</td>
+                    <td>{{ vehiculo.estado_vehiculo }}</td>
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="3" style="padding: 10px; text-align: center;">No hay vehículos registrados.</td>
+                    <td colspan="2" class="no-vehiculos">No hay vehículos registrados.</td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -75,9 +77,9 @@
 
         // Actualizar el texto del botón según el estado del vehículo
         if (estadoVehiculo === "Dentro de terminal") {
-            boton.textContent = "Marcar Salida";
+            boton.innerHTML = '<i class="fas fa-sign-out-alt"></i> Marcar Salida';
         } else {
-            boton.textContent = "Marcar Entrada";
+            boton.innerHTML = '<i class="fas fa-sign-in-alt"></i> Marcar Entrada';
         }
     }
 
